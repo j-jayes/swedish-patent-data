@@ -5,3 +5,79 @@ date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: html_document
 ---
 
+## Purpose
+
+Scrape the website of the patent data in order to download the patent information and the PDFs.
+
+First I have to get the list of URLs from which to download the pdfs.
+
+So I start with the base URL
+
+```{r}
+library(tidyverse)
+library(rvest)
+
+url <- "https://tc.prv.se/spd/search?content=elektricitet&lang=en&tab=1&hits=true"
+
+url_2 <- "https://tc.prv.se/spd/search?hits=true&tab=1&sort=filingdate&lang=en&content=elektricitet&start=0&range=50"
+
+html <- read_html(url_2)
+
+# this gets the URLs for each patent page. I'll have to visit each page, get the information about the filling - and then download the PDF.
+html %>% 
+  html_nodes("#hitlist td a") %>%
+  html_attr("href")
+
+```
+
+Let's write a function to do this!
+
+We will need a list of the pages from which to get the URLs.
+
+There are 6009 results. That is 121 pages of results. So I must change the start to increment by 50 each time to 6000.
+
+```{r}
+base_url <- "https://tc.prv.se/spd/search?hits=true&tab=1&sort=filingdate&lang=en&content=elektricitet&start=0&range=50"
+
+tbl_of_pages <- str_c("https://tc.prv.se/spd/search?hits=true&tab=1&sort=filingdate&lang=en&content=elektricitet&start=",
+                       seq(0, 6000, by = 50),
+                       "&range=50") %>% 
+  as_tibble() %>% 
+  rename(search_url = value)
+
+tbl_of_pages
+```
+
+Now I have tibble of pages with 121 URLs.
+
+```{r}
+tbl_of_pages %>% 
+  slice_sample(n = 1) %>% 
+  pull()
+```
+
+This seems to work - now need to check if I can get the URLs of each patent from the search pages.
+
+```{r}
+url_3 <- "https://tc.prv.se/spd/search?hits=true&tab=1&sort=filingdate&lang=en&content=elektricitet&start=5700&range=50"
+
+html <- read_html(url_3)
+
+html %>% 
+  html_nodes("#hitlist td a") %>%
+  html_attr("href")
+```
+
+Works! Though it seems this may not be necessary as the URLs have a standard structure.
+```{r}
+"/spd/patent?p2=gHQ4LQJ1rM0&hits=true&tab=1&sort=filingdate&lang=en&content=elektricitet&range=50&hitsstart=5700&start=5749"
+```
+
+They all have "&hitsstart=5700&start=5749" at the end so I can just make the list of links methodically.
+
+```{r}
+html <- read_html("https://tc.prv.se/spd/patent?p2=HIdBuuVipjw&hits=true&tab=1&sort=filingdate&lang=en&content=elektricitet&range=50&hitsstart=5700&start=5704")
+
+
+```
+
