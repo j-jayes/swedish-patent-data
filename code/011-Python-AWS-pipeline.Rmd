@@ -1,0 +1,148 @@
+---
+title: "011-Python-AWS-pipeline"
+author: "JJayes"
+date: "17/01/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(reticulate)
+library(here)
+```
+
+```{python}
+# !pip install boto3[crt]
+import boto3
+```
+
+First I have to configure the AWS client with my credeitnials. To do this I need to install the [AWS shell](https://github.com/awslabs/aws-shell)?
+
+
+```{python}
+# !pip install aws-shell
+
+# initialize the textract client
+client = boto3.client('textract', region_name = 'us-east-2')
+```
+
+ 
+# analyze_document
+This command is useful if you have tabular data.
+
+# detect_document_text
+ This command takes your input image and identifies all the blocks of text - gives you all the lines of text and pages.
+
+You can provide your image as a pointer to an s3 object, or use a bytes encoded document that you have stored locally. That's the only parameter we need to set.
+
+First I need to convert my pdf to jpeg. I'm gonna use imagemagick in R here.
+
+```{r}
+library(magick)
+
+pdf <- image_read_pdf(here("data", "test-patents", "SE2555_C1.pdf"))
+
+jpeg <- image_convert(pdf, format = "jpeg")
+
+page_1 <- jpeg[1]
+page_2 <- jpeg[2]
+
+page_1 %>% image_write(here("data", "test-patents", "SE2555_C1_1.jpeg"))
+page_2 %>% image_write(here("data", "test-patents", "SE2555_C1_2.jpeg"))
+```
+
+
+```{python}
+# also need to find equivalent of here package
+# !pip install pyprojroot
+from pyprojroot import here
+
+here()
+```
+
+
+```{python}
+# use image strored in s3
+response = client.detect_document_text(Document = {
+  'S3Object': {
+    'Bucket': 'swedish-patent-data',
+    'Name': 'test-patents/SE2555_C1_1.jpeg'
+  }
+  
+})
+
+print(response)
+```
+
+```{python}
+response.keys()
+
+response["DocumentMetadata"]
+
+response['DetectDocumentTextModelVersion']
+
+response["ResponseMetadata"]
+```
+
+We care about
+
+```{python}
+response["Blocks"]
+
+blocks = response["Blocks"]
+```
+
+Each object in the list will be a section defining a block of output. So 
+
+```{python}
+len(blocks)
+```
+
+Each block provides a block type and geometry information 
+
+```{python}
+blocks[0]
+```
+
+What are the items?
+
+```{python}
+from collections import Counter
+
+block_counts = Counter(x["BlockType"] for x in blocks)
+
+block_counts
+```
+
+So we see we have 554 words, 85 lines and one page.
+
+```{python}
+blocks[3]
+```
+
+## Get all the lines from the image
+
+```{python}
+all_lines = [l for l in blocks if l["BlockType"] == "LINE"]
+
+len(all_lines)
+```
+
+
+```{python}
+for i in all_lines:
+  print(i["Text"])
+  
+```
+
+## Making use of other textract output to combine lines in a logical way
+
+Keep the columns together
+
+```{r}
+
+```
+

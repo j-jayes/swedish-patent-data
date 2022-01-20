@@ -4,3 +4,8 @@ author: "JJayes"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: html_document
 ---
+
+
+For google patents
+
+Map of where patents are registered. 

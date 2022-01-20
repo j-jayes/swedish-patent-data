@@ -81,3 +81,433 @@ html <- read_html("https://tc.prv.se/spd/patent?p2=HIdBuuVipjw&hits=true&tab=1&s
 
 ```
 
+
+### Ingest data from patents.google.com
+
+[Google Patents](https://patents.google.com/?q=electricity&country=SE&sort=old) is a searchable online repository of patents.
+
+I've searched for patents registered in Sweden using the term "electricity" or "elektricitet" and downloaded the links. There are 12,000.
+
+```{r}
+library(tidyverse)
+library(here)
+df <- readxl::read_excel(here("data", "patent-info-google", "Electricity_patents_list_Google_Patents.xlsx"), skip = 1)
+```
+
+Cleaning and feature engineering.
+
+```{r}
+df <- df %>% 
+  mutate(across(contains("date"), as.Date)) %>% 
+  janitor::clean_names()
+```
+
+```{r}
+df %>% 
+  mutate(year = lubridate::year(priority_date)) %>% 
+  count(year) %>% 
+  ggplot(aes(year, n)) +
+  geom_col(fill = "midnightblue") +
+  scale_y_continuous(labels = scales::number_format()) +
+  labs(y = "Patents including the term 'Electricity'",
+       x = NULL)
+```
+
+### Scrape contents for text?
+
+```{r}
+df %>% 
+  slice(12L) %>% 
+  select(result_link) %>% 
+  pull()
+```
+
+
+```{r}
+library(rvest)
+
+url <- "https://patents.google.com/patent/SE127438C1/en"
+
+html <- read_html(url)
+```
+
+#### Tables
+
+Need to get table titles to select the right ones
+
+```{r}
+html %>% 
+  html_nodes("h2,table") %>% 
+  html_text() %>% 
+  as_tibble()
+  html_table()
+
+html %>%
+  html_nodes("table") %>%
+  html_nodes("thead") %>%
+  html_text() %>%
+  as_tibble() %>%
+  summarise(n_items = str_count(value, "\\\n")) %>% 
+  mutate(rn = row_number())
+
+
+  
+  
+  html_table() %>% map_dfr(., bind_rows) %>% view
+  map_df(tibble(
+    titles = html_nodes("thead") %>% html_text()
+    tables = html_nodes("table") %>% nest(html_table())
+  ))
+  html_nodes("th")
+  html_text() %>% 
+  as_tibble()
+  html_table()
+```
+
+```{r}
+html %>% 
+  html_table()
+```
+
+What do I want? The ones with 5 columns and 3 columns
+
+```{r}
+html %>% 
+  html_table() %>% 
+  filter()
+```
+
+### Countries
+
+```{r}
+html %>%
+    html_nodes("[itemprop='countryStatus']") %>%
+    html_nodes("[itemprop='countryCode']") %>%
+    html_text()
+
+```
+
+### Other citations
+
+```{r}
+
+# href
+html %>%
+  html_nodes("[itemprop='backwardReferencesFamily']") %>%
+  html_nodes("a") %>% 
+  html_attr("href")
+
+# patent numbers
+html %>%
+  html_nodes("[itemprop='backwardReferencesFamily']") %>%
+  html_nodes("[itemprop='publicationNumber']") %>% 
+  html_text()
+
+# primaryLanguage
+html %>%
+  html_nodes("[itemprop='backwardReferencesFamily']") %>%
+  html_nodes("[itemprop='primaryLanguage']") %>% 
+  html_text()
+
+# publicationDate
+html %>%
+  html_nodes("[itemprop='backwardReferencesFamily']") %>%
+  html_nodes("[itemprop='publicationDate']") %>% 
+  html_text() %>% 
+  lubridate::ymd()
+
+# title
+html %>%
+  html_nodes("[itemprop='backwardReferencesFamily']") %>%
+  html_nodes("[itemprop='title']") %>% 
+  html_text()
+
+# title
+html %>%
+  html_nodes("[itemprop='backwardReferencesFamily']") %>%
+  html_nodes("[itemprop='title']") %>% 
+  html_text()
+
+```
+
+Forward links
+
+```{r}
+# forwardReferences
+# url
+html %>%
+  html_nodes("[itemprop='forwardReferences']") %>%
+  html_nodes("a") %>% 
+  html_attr("href")
+
+# publicationNumber
+html %>%
+  html_nodes("[itemprop='forwardReferences']") %>%
+  html_nodes("[itemprop='publicationNumber']") %>% 
+  html_text()
+
+# primaryLanguage
+html %>%
+  html_nodes("[itemprop='forwardReferences']") %>%
+  html_nodes("[itemprop='primaryLanguage']") %>% 
+  html_text()
+
+# publicationDate
+html %>%
+  html_nodes("[itemprop='forwardReferences']") %>%
+  html_nodes("[itemprop='publicationDate']") %>% 
+  html_text()
+
+# assigneeOriginal
+html %>%
+  html_nodes("[itemprop='forwardReferences']") %>%
+  html_nodes("[itemprop='assigneeOriginal']") %>% 
+  html_text()
+
+# title
+html %>%
+  html_nodes("[itemprop='forwardReferences']") %>%
+  html_nodes("[itemprop='title']") %>% 
+  html_text()
+
+```
+
+Also published as
+
+
+
+## Refactoring
+
+```{r}
+
+get_all_citation_items <- function() {
+  items <- tibble(key = c("publicationNumber", "primaryLanguage"))
+
+  items %>%
+    mutate(value = possibly(~ get_citation_item(part), "failed"))
+}
+
+get_citation_item <- function(part) {
+  html %>%
+    html_nodes("[itemprop='backwardReferencesFamily']") %>%
+    html_nodes(paste0("[itemprop='", part, "']")) %>%
+    html_text()
+}
+
+test_function <- function(url){
+  
+  html <- read_html(url)
+  
+  html %>% 
+    get_all_citation_items
+  
+}
+
+test_function(url)
+
+```
+
+
+## Title
+
+```{r}
+html %>% 
+  html_nodes("title") %>% 
+  html_text(trim = T) %>% 
+  str_squish() %>% 
+  str_remove(., " - Google Patents")
+```
+
+
+```{r}
+html %>% 
+  html_nodes(".media-body") %>% 
+  map_df(~{
+    data_frame(
+      postal = html_node(.x, "span") %>% html_text(trim=TRUE),
+      city = html_nodes(.x, "ul > li") %>% html_text(trim=TRUE)
+    )
+  }) 
+```
+
+
+#### Text including description and claims
+
+It's written in Swedish and then in English - perhaps I can try to 
+
+```{r}
+html %>% 
+  html_nodes(".description-paragraph") %>% 
+  html_nodes(".google-src-text") %>% 
+  html_text()
+
+
+html %>% 
+  html_nodes(".description-paragraph") %>% 
+  html_nodes(".notranslate") %>% 
+  html_nodes("span") %>% 
+  html_text(trim = T) %>% as_tibble()
+
+
+html %>% 
+  html_nodes(".description-paragraph") %>% 
+  html_nodes(".notranslate")
+
+
+html %>% 
+  html_nodes(".google-src-text") %>% 
+  html_nodes(".style-scope") %>% 
+  html_nodes(".patent-text")
+
+
+
+  html_text(trim = T) %>% 
+  as_tibble() %>% 
+  rename(description = value) %>%
+  mutate(n_chat = nchar(description),
+         swedish = str_locate_all(description, "\\.")) %>% view
+```
+
+```{r}
+html %>% 
+  html_nodes(".claim-text") %>% 
+  html_text(trim = T) %>% 
+  as_tibble() %>% 
+  rename(description = value) %>% slice(3L) %>% pull()
+  mutate(description = str_squish(description))
+```
+
+
+Praise [this Stackoverflow post](https://stackoverflow.com/questions/57627835/rvest-scraping-html-content-values) for helping me find how to get each item.
+
+```{r}
+html %>% 
+  html_nodes("[itemprop='concept']") %>% 
+  html_nodes("[itemprop='name']") %>% 
+  html_text()
+    
+```
+
+
+
+
+```{r}
+url <- "https://www.pole-emploi.fr/annuaire/votre-pole-emploi/provins-77160"
+html <- read_html(url)
+
+html %>% 
+  html_nodes(".media-body") %>% 
+  map_df(~{
+    data_frame(
+      postal = html_node(.x, "span") %>% html_text(trim=TRUE),
+      city = html_nodes(.x, "ul > li") %>% html_text(trim=TRUE)
+    )
+  }) 
+```
+
+### Function to iterate through patent information
+
+I want to take out the name, the count.
+
+```{r}
+get_patent_info <- function(page_html) {
+  
+  title <- html %>%
+    html_nodes("title") %>%
+    html_text(trim = T) %>%
+    str_squish() %>%
+    str_remove(., " - Google Patents")
+
+  ids <- html %>%
+    html_nodes("[itemprop='concept']") %>%
+    html_nodes("[itemprop='id']") %>%
+    html_text()
+
+  names <- html %>%
+    html_nodes("[itemprop='concept']") %>%
+    html_nodes("[itemprop='name']") %>%
+    html_text()
+
+  counts <- html %>%
+    html_nodes("[itemprop='concept']") %>%
+    html_nodes("[itemprop='count']") %>%
+    html_text()
+
+  concepts <- tibble(ids, names, counts) %>%
+    nest(concepts = c(ids, names, counts))
+  
+  tibble(title, concepts)
+}
+
+
+```
+
+To refactor here:
+
+```{r}
+# html %>%
+#     html_nodes("[itemprop='concept']") %>%
+#     html_nodes("[itemprop='count']") %>%
+#     html_text()
+#  itemprops <- c("id", "name", "count")
+# get_itemprop(html, item){
+#   
+#   html %>%
+#     html_nodes("[itemprop='concept']") %>%
+#     html_nodes(paste0("[itemprop='", item, "']") %>%
+#     html_text()
+#   
+# }
+
+```
+
+
+# Whole function:
+
+```{r}
+get_patent_info <- function(url) {
+  
+  html <- read_html(url)
+  
+  title <- html %>%
+    html_nodes("title") %>%
+    html_text(trim = T) %>%
+    str_squish() %>%
+    str_remove(., " - Google Patents")
+  
+  ids <- html %>%
+    html_nodes("[itemprop='concept']") %>%
+    html_nodes("[itemprop='id']") %>%
+    html_text()
+
+  names <- html %>%
+    html_nodes("[itemprop='concept']") %>%
+    html_nodes("[itemprop='name']") %>%
+    html_text()
+
+  counts <- html %>%
+    html_nodes("[itemprop='concept']") %>%
+    html_nodes("[itemprop='count']") %>%
+    html_text()
+
+  concepts <- tibble(ids, names, counts) %>%
+    nest(concepts = c(ids, names, counts))
+  
+  tibble(title, concepts)
+}
+```
+
+
+```{r}
+df %>% 
+  as_tibble() %>% 
+  janitor::clean_names() %>% 
+  mutate(filing_date = lubridate::ymd(filing_date),
+         year = lubridate::year(filing_date)) %>%
+  count(year) %>% 
+  ggplot(aes(year, n)) +
+  geom_col(fill = "darkred")
+
+```
+
+
