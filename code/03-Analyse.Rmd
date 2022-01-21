@@ -9,3 +9,112 @@ output: html_document
 For google patents
 
 Map of where patents are registered. 
+
+```{r}
+theme_set(theme_light())
+
+df <- read_rds(here("data", "patent-info-google", "Electricity_patents_list_Google_Patents.rds"))
+```
+
+```{r}
+df_google_counts <- df %>% 
+  mutate(year = lubridate::year(priority_date)) %>% 
+  count(year) %>% 
+  mutate(source = "Google")
+
+df_google_counts %>% 
+  ggplot(aes(year, n)) +
+  geom_col(fill = "midnightblue") +
+  scale_y_continuous(labels = scales::number_format()) +
+  labs(y = "Patents including the term 'Electricity'",
+       x = NULL)
+```
+
+
+```{r}
+df_1 <- read_rds("data/patent-info-prv/Electricity_patents_list_prv_19-01-22.rds")
+
+df_prv_counts <- df_1 %>% 
+  mutate(year = lubridate::year(filing_date)) %>% 
+  count(year) %>% 
+  mutate(source = "Patent- och registreringsverket")
+
+df_prv_counts %>% 
+  ggplot(aes(year, n)) +
+  geom_col(fill = "midnightblue") +
+  scale_y_continuous(labels = scales::number_format()) +
+  labs(y = "Patents including the term 'Electricity'",
+       x = NULL)
+```
+
+
+```{r}
+jpeg(
+  filename = here::here("figures", "patent_counts_by_source.jpeg"),
+  height = 4,
+  width = 6,
+  units = "in",
+  res = 1000
+)
+
+df_prv_counts %>% 
+  bind_rows(df_google_counts) %>% 
+  ggplot(aes(year, n, fill = source)) +
+  geom_col() +
+  scale_fill_brewer(palette = "Paired") +
+  facet_wrap(~ source, nrow = 2) +
+  theme(legend.position = "none") +
+  labs(y = "Patents including the term 'Electricity'",
+       x = NULL)
+
+dev.off()
+```
+
+
+```{r}
+library(tidytext)
+
+df_1 %>% 
+  unnest_tokens(title, output = "word") %>% 
+  mutate(decade = lubridate::year(filing_date) - lubridate::year(filing_date) %% 10) %>% 
+  count(word, decade, sort = T)
+  # %>% write_excel_csv("data/patent-info-prv/prv_words.csv")
+
+df_1_words <- read_excel("data/patent-info-prv/prv_words_translated.xlsx")
+
+df_1_words <- df_1_words %>% 
+  rename(sw_word = word...1, eng_word = word...4)
+```
+
+
+```{r}
+jpeg(
+  filename = here::here("figures", "patent_title_words_prv.jpeg"),
+  height = 4,
+  width = 6,
+  units = "in",
+  res = 1000
+)
+
+
+df_1_words %>% 
+  filter(decade != 2020) %>% 
+  anti_join(stop_words, by = c("eng_word" = "word")) %>% 
+  filter(eng_word != "NA") %>% 
+  group_by(decade) %>% 
+  slice_max(n, n = 12) %>% 
+  ungroup() %>% 
+  mutate(eng_word = reorder_within(eng_word, n, decade)) %>% 
+  ggplot(aes(n, eng_word, fill = factor(decade))) +
+  geom_col(show.legend = F) +
+  scale_y_reordered() +
+  scale_fill_viridis_d() +
+  facet_wrap(~ decade, scales = "free_y") +
+  labs(x = "Number of times term is used in patent title",
+       y = NULL)
+
+dev.off()
+```
+
+
+

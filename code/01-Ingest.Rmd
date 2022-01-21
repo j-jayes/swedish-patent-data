@@ -100,6 +100,8 @@ Cleaning and feature engineering.
 df <- df %>% 
   mutate(across(contains("date"), as.Date)) %>% 
   janitor::clean_names()
+
+# df %>% write_rds(here("data", "patent-info-google", "Electricity_patents_list_Google_Patents.rds"))
 ```
 
 ```{r}
@@ -230,7 +232,7 @@ html %>%
 
 ```
 
-Forward links
+# Forward links
 
 ```{r}
 # forwardReferences
@@ -256,7 +258,8 @@ html %>%
 html %>%
   html_nodes("[itemprop='forwardReferences']") %>%
   html_nodes("[itemprop='publicationDate']") %>% 
-  html_text()
+  html_text() %>% 
+  lubridate::ymd()
 
 # assigneeOriginal
 html %>%
@@ -274,6 +277,71 @@ html %>%
 
 Also published as
 
+```{r}
+# docdbFamily
+# url
+html %>%
+  html_nodes("[itemprop='docdbFamily']") %>%
+  html_nodes("a") %>% 
+  html_attr("href")
+
+# publicationNumber
+html %>%
+  html_nodes("[itemprop='docdbFamily']") %>%
+  html_nodes("[itemprop='publicationNumber']") %>% 
+  html_text()
+
+# primaryLanguage
+html %>%
+  html_nodes("[itemprop='docdbFamily']") %>%
+  html_nodes("[itemprop='primaryLanguage']") %>% 
+  html_text()
+
+# publicationDate
+html %>%
+  html_nodes("[itemprop='docdbFamily']") %>%
+  html_nodes("[itemprop='publicationDate']") %>% 
+  html_text() %>% 
+  lubridate::ymd()
+
+```
+
+
+Similar Documents
+
+```{r}
+# url
+html %>%
+  html_nodes("[itemprop='similarDocuments']") %>%
+  html_nodes("a") %>% 
+  html_attr("href")
+
+# isPatent
+html %>%
+  html_nodes("[itemprop='similarDocuments']") %>%
+  html_nodes("[itemprop='isPatent']") %>% 
+  html_attr("content") 
+
+# publicationNumber
+html %>%
+  html_nodes("[itemprop='similarDocuments']") %>%
+  html_nodes("[itemprop='publicationNumber']") %>% 
+  html_text()
+
+# primaryLanguage
+html %>%
+  html_nodes("[itemprop='similarDocuments']") %>%
+  html_nodes("[itemprop='primaryLanguage']") %>% 
+  html_text()
+
+# title
+html %>%
+  html_nodes("[itemprop='similarDocuments']") %>%
+  html_nodes("[itemprop='title']") %>% 
+  html_text(trim = T)
+
+
+```
 
 
 ## Refactoring
@@ -290,7 +358,7 @@ get_all_citation_items <- function() {
 get_citation_item <- function(part) {
   html %>%
     html_nodes("[itemprop='backwardReferencesFamily']") %>%
-    html_nodes(paste0("[itemprop='", part, "']")) %>%
+    html_nodes(0("[itemprop='", part, "']")) %>%
     html_text()
 }
 
@@ -345,7 +413,7 @@ html %>%
 html %>% 
   html_nodes(".description-paragraph") %>% 
   html_nodes(".notranslate") %>% 
-  html_nodes("span") %>% 
+  # html_nodes("span") %>% 
   html_text(trim = T) %>% as_tibble()
 
 

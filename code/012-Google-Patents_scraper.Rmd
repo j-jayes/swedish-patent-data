@@ -1,0 +1,208 @@
+---
+title: "Google Patents Scraper"
+author: "JJayes"
+date: "20/01/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Purpose
+
+Scraping google patents for information about electricity related patents in Sweden.
+
+# Process
+
+Has three parts:
+
+1. List of pages to scrape
+
+2. Scraper script
+
+3. Iterator
+
+## List of pages to scrape
+
+```{r}
+library(dplyr)
+library(readr)
+library(stringr)
+library(tidyr)
+library(purrr)
+
+# or
+library(tidyverse)
+library(rvest)
+library(here)
+
+```
+
+```{r}
+df <- read_rds(here("data", "patent-info-google", "Electricity_patents_list_Google_Patents.rds"))
+
+list_of_pages <- df %>% 
+  select(id, patent_url = result_link)
+```
+
+## Scraper Script
+
+Things I want from the patent page:
+
+* Title
+* Description and claims text
+* Countries where patent is registered
+* Other citations
+* Forward links to other patents
+* Patents that this patent cites
+* Also published as
+* Similar documents
+* Concepts that are mentioned in the patent
+
+```{r}
+get_patent_info <- function(patent_url) {
+  
+  Sys.sleep(.5)
+  
+  # message so we know it's doing something
+  message(paste0("Getting patent info from ", patent_url))
+  
+  # get html
+  html <- read_html(patent_url)
+  
+# title
+  title <- html %>%
+    html_nodes("title") %>%
+    html_text(trim = T) %>%
+    str_squish() %>%
+    str_remove(., " - Google Patents")
+  
+# text
+  description_text <- html %>%
+    html_nodes(".description-paragraph") %>%
+    html_nodes(".notranslate") %>%
+    # html_nodes("span") %>%
+    html_text(trim = T) %>%
+    as_tibble() %>%
+    nest(desc_text = c(value))
+
+  claims_text <- html %>%
+    html_nodes(".claim-text") %>%
+    html_text(trim = T) %>%
+    as_tibble() %>%
+    nest(claim_text = c(value))
+  
+# countries
+  countries <- html %>%
+    html_nodes("[itemprop='countryStatus']") %>%
+    html_nodes("[itemprop='countryCode']") %>%
+    html_text() %>% paste0(collapse = ", ")
+  
+# forwardReferences
+# url
+forwardReferences_links <- html %>%
+  html_nodes("[itemprop='forwardReferences']") %>%
+  html_nodes("a") %>%
+  html_attr("href") %>%
+  as_tibble() %>%
+  nest(forwardReferences_link = c(value))
+
+# publicationNumber
+forwardReferences_p_numbers <- html %>%
+  html_nodes("[itemprop='forwardReferences']") %>%
+  html_nodes("[itemprop='publicationNumber']") %>% 
+  html_text() %>%
+  as_tibble() %>% 
+  nest(forwardReferences_p_number = c(value))
+
+# primaryLanguage
+forwardReferences_p_langs <- html %>%
+  html_nodes("[itemprop='forwardReferences']") %>%
+  html_nodes("[itemprop='primaryLanguage']") %>% 
+  html_text() %>%
+  as_tibble() %>% 
+  nest(forwardReferences_p_lang = c(value))
+
+# publicationDate
+forwardReferences_p_dates <- html %>%
+  html_nodes("[itemprop='forwardReferences']") %>%
+  html_nodes("[itemprop='publicationDate']") %>% 
+  html_text() %>% 
+  lubridate::ymd() %>% 
+  as_tibble() %>% 
+  nest(forwardReferences_p_dates = c(value))
+
+# assigneeOriginal
+forwardReferences_assigneeOriginals <- html %>%
+  html_nodes("[itemprop='forwardReferences']") %>%
+  html_nodes("[itemprop='assigneeOriginal']") %>% 
+  html_text() %>% 
+  as_tibble() %>% 
+  nest(forwardReferences_assigneeOriginal = c(value))
+
+# stopping with backward refs for now
+
+# concepts
+  ids <- html %>%
+    html_nodes("[itemprop='concept']") %>%
+    html_nodes("[itemprop='id']") %>%
+    html_text()
+
+  names <- html %>%
+    html_nodes("[itemprop='concept']") %>%
+    html_nodes("[itemprop='name']") %>%
+    html_text()
+
+  counts <- html %>%
+    html_nodes("[itemprop='concept']") %>%
+    html_nodes("[itemprop='count']") %>%
+    html_text()
+
+  concepts <- tibble(ids, names, counts) %>%
+    nest(concepts = c(ids, names, counts))
+  
+  output <- tibble(title, 
+         description_text,
+         concepts,
+         claims_text,
+         countries,
+         forwardReferences_links,
+         forwardReferences_p_numbers,
+         forwardReferences_p_langs,
+         forwardReferences_p_dates,
+         forwardReferences_assigneeOriginals)
+  
+  output
+}
+
+```
+
+Works aight!
+
+```{r}
+list_of_pages %>% 
+  slice_sample(n = 5) %>% 
+  head(1) %>% 
+  select(patent_url) %>% 
+  pull()
+
+test <- get_patent_info("https://patents.google.com/patent/SE432859B/en")
+
+test %>%
+  unnest(concepts)
+```
+
+## Iterator
+
+```{r}
+test <- list_of_pages %>% 
+  slice_sample(n = 5) %>% 
+  head(1) %>% 
+  mutate(patent_info = map(patent_url, get_patent_info))
+```
+
+```{r}
+test %>% unnest(patent_info) %>% view
+```
+
