@@ -86,36 +86,50 @@ name: source
 
 ---
 
-# Riksvakanslistan
+# What does it look like?
 
 &lt;img src="data/riksvakanslistan/riksvakanslistan_21_09_1927_small.jpg" style="display: block; margin: auto;" /&gt;
 
 ---
-# Components
-
+# Who is included?
 .panelset[
 .panel[.panel-name[Table of vacancies]
 
-&lt;img src="data/riksvakanslistan/top-left-table.PNG" width="1088" style="display: block; margin: auto;" /&gt;
+&lt;img src="data/riksvakanslistan/top-left-table.PNG" width="80%" style="display: block; margin: auto;" /&gt;
 
 ]
 
 
 .panel[.panel-name[Job seekers]
 
-]
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="data/riksvakanslistan/arbetssökande.PNG" alt="Generic" width="80%" /&gt;
+&lt;p class="caption"&gt;Generic&lt;/p&gt;
+&lt;/div&gt;
 
-.panel[.panel-name[Special announcements]
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="data/riksvakanslistan/platssökande.PNG" alt="Personalized" width="80%" /&gt;
+&lt;p class="caption"&gt;Personalized&lt;/p&gt;
+&lt;/div&gt;
 
 ]]
 
-
-
 ---
-# Components
+# Who is included?
 
 .panelset[
 .panel[.panel-name[Occupational types]
+
+.pull-left[
+
+* 5 groups of occupations
+
+* Approx. 100 occupations in table
+
+* Less common occupations listed below table
+
+]
+
 
 
 |Occupation        |English translation  |
@@ -128,8 +142,11 @@ name: source
 
 ]
 
-
 .panel[.panel-name[Occupational rankings]
+
+### Recorded vacancies for different skill-levels/ages within similar jobs.
+
+&lt;br&gt;
 
 .pull-left[
 
@@ -154,6 +171,10 @@ name: source
 
 .panel[.panel-name[Required skills]
 
+### Special announcements section includes sometimes detailed job adverts.
+
+&lt;br&gt;
+
 
 |Vacancy ad                                                                                                                                                                                                                                                                                   |English translation                                                                                                                                                                                                                                                                                                                  |
 |:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -167,7 +188,7 @@ name: source
 
 # Where are the offices?
 
-&lt;img src="index_files/figure-html/unnamed-chunk-11-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-13-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -181,9 +202,29 @@ name: fit
 
 ---
 
-# Existing occupational title records
+# What were titles in 19th C?
 
-&lt;img src="index_files/figure-html/unnamed-chunk-12-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-14-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: inverse, middle
+
+# To complement:
+
+* Census data from 19th C listing occupations
+
+* Current day job adverts
+
+* Other individual records like tax records
+
+## Fun things to look at:
+
+1. Rate of creation of new occupational titles.
+
+2. Skills requested in the special announcements.
+
+3. Seasonal variation in labour demand.
 
 ---
 
@@ -196,7 +237,7 @@ name: digitize
 
 ---
 
-class: centre, inverse, middle
+class: inverse, middle
 
 # Regular extraction pipeline
 
@@ -312,7 +353,7 @@ text %&gt;%
 
 ---
 
-class: centre, inverse, middle
+class: inverse, middle
 
 # AWS Extraction pipeline
 
@@ -362,7 +403,7 @@ class: centre, inverse, middle
 ]
 
 ---
-# Useful Resources:
+# Useful Resource:
 
 A [recorded talk](https://www.kellogg.northwestern.edu/news-events/conference/methodological-advances-2021.aspx) from the Methodological Advances in the Extraction and Analysis of Historical Data conference and the [accompanying paper](https://www.angelavossmeyer.com/uploads/5/6/6/2/56627489/northwestern_exeh_amujalavossmeyerdas_paper.pdf) from Angela Vossmeyer and coauthors are a great place to start if you want to do your own digitization with AWS.
 

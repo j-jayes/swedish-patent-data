@@ -85,19 +85,18 @@ name: source
 
 ---
 
-# Riksvakanslistan
+# What does it look like?
 
 ```{r}
 knitr::include_graphics("data/riksvakanslistan/riksvakanslistan_21_09_1927_small.jpg")
 ```
 
 ---
-# Components
-
+# Who is included?
 .panelset[
 .panel[.panel-name[Table of vacancies]
 
-```{r}
+```{r, out.width="80%"}
 knitr::include_graphics("data/riksvakanslistan/top-left-table.PNG")
 ```
 
@@ -106,19 +105,34 @@ knitr::include_graphics("data/riksvakanslistan/top-left-table.PNG")
 
 .panel[.panel-name[Job seekers]
 
-]
+```{r, fig.cap="Generic", out.width="80%"}
+knitr::include_graphics("data/riksvakanslistan/arbetssökande.PNG")
 
-.panel[.panel-name[Special announcements]
+```
+
+```{r, fig.cap="Personalized", out.width="80%"}
+knitr::include_graphics("data/riksvakanslistan/platssökande.PNG")
+
+```
 
 ]]
 
-
-
 ---
-# Components
+# Who is included?
 
 .panelset[
 .panel[.panel-name[Occupational types]
+
+.pull-left[
+
+* 5 groups of occupations
+
+* Approx. 100 occupations in table
+
+* Less common occupations listed below table
+
+]
+
 
 ```{r}
 occs <- tibble(svk = c("Jordbruksarbete", "Yrkesarbete", "Husligt arbete", "Hotellrörelse", "Kontor och handel"),
@@ -130,8 +144,11 @@ knitr::kable(occs, col.names = c("Occupation", "English translation"))
 
 ]
 
-
 .panel[.panel-name[Occupational rankings]
+
+### Recorded vacancies for different skill-levels/ages within similar jobs.
+
+<br>
 
 .pull-left[
 
@@ -157,6 +174,10 @@ knitr::include_graphics("data/riksvakanslistan/mejerinnor.png")
 ]
 
 .panel[.panel-name[Required skills]
+
+### Special announcements section includes sometimes detailed job adverts.
+
+<br>
 
 ```{r}
 shop_assistant <- tibble(svk = c("Handelsbiträde - dekoratör - fri från värnplikt, vana i manufaktur- eller porslins- och glasbranschen, med god smak för skyltning samt kunnig i texting, erhåller anställning i Borås den 1 okt. Begynnelselön 200 kr. per månad. Vidare infromation meddelar Arbetsförmedlingen i Göteborg."),
@@ -212,7 +233,7 @@ name: fit
 
 ---
 
-# Existing occupational title records
+# What were titles in 19th C?
 
 ```{r, fig.height=5.8}
 library(tidytext)
@@ -232,6 +253,26 @@ df_occs %>%
   theme(legend.position = "none",
         axis.text.y = element_text(size = 11))
 ```
+
+---
+
+class: inverse, middle
+
+# To complement:
+
+* Census data from 19th C listing occupations
+
+* Current day job adverts
+
+* Other individual records like tax records
+
+## Fun things to look at:
+
+1. Rate of creation of new occupational titles.
+
+2. Skills requested in the special announcements.
+
+3. Seasonal variation in labour demand.
 
 ---
 
@@ -407,7 +448,7 @@ df %>% knitr::kable(col.names = c("", "1929", "1930", "1931", "1931", "1931", "1
 ]
 
 ---
-# Useful Resources:
+# Useful Resource:
 
 A [recorded talk](https://www.kellogg.northwestern.edu/news-events/conference/methodological-advances-2021.aspx) from the Methodological Advances in the Extraction and Analysis of Historical Data conference and the [accompanying paper](https://www.angelavossmeyer.com/uploads/5/6/6/2/56627489/northwestern_exeh_amujalavossmeyerdas_paper.pdf) from Angela Vossmeyer and coauthors are a great place to start if you want to do your own digitization with AWS.
 
