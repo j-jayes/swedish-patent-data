@@ -165,7 +165,7 @@ knitr::kable(occs_dairy, col.names = c("Occupation", "English translation"))
 .pull-right[
 
 ```{r}
-knitr::include_graphics("data/riksvakanslistan/mejerinnor.png")
+knitr::include_graphics("data/riksvakanslistan/mejerinnor.PNG")
 ```
 
 
@@ -232,8 +232,19 @@ name: fit
 
 
 ---
+# Period and frequency?
 
-# What were titles in 19th C?
+### LUB has records from 1916-1958
+
+Some are missing towards the end of the series.
+
+### Produced weekly
+
+More vacancies in summer months than winter.
+
+---
+
+# What were titles at turn of century?
 
 ```{r, fig.height=5.8}
 library(tidytext)
