@@ -43,15 +43,15 @@ First I need to convert my pdf to jpeg. I'm gonna use imagemagick in R here.
 ```{r}
 library(magick)
 
-pdf <- image_read_pdf(here("data", "test-patents", "SE2555_C1.pdf"))
-
-jpeg <- image_convert(pdf, format = "jpeg")
-
-page_1 <- jpeg[1]
-page_2 <- jpeg[2]
-
-page_1 %>% image_write(here("data", "test-patents", "SE2555_C1_1.jpeg"))
-page_2 %>% image_write(here("data", "test-patents", "SE2555_C1_2.jpeg"))
+# pdf <- image_read_pdf(here("data", "test-patents", "SE2555_C1.pdf"))
+# 
+# jpeg <- image_convert(pdf, format = "jpeg")
+# 
+# page_1 <- jpeg[1]
+# page_2 <- jpeg[2]
+# 
+# page_1 %>% image_write(here("data", "test-patents", "SE2555_C1_1.jpeg"))
+# page_2 %>% image_write(here("data", "test-patents", "SE2555_C1_2.jpeg"))
 ```
 
 
@@ -144,5 +144,206 @@ Keep the columns together
 
 ```{r}
 
+```
+
+
+# Trying to get a table out
+# analyze_document
+
+```{r}
+library(magick)
+
+pdf <- image_read_pdf(here("data", "ransom", "Egentliga Finland_11_16.pdf"))
+
+jpeg <- image_convert(pdf, format = "jpeg")
+
+page_1 <- jpeg[1]
+page_2 <- jpeg[2]
+
+page_1 %>% image_write(here("data", "ransom", "Egentliga Finland_11_16_1.jpeg"))
+page_2 %>% image_write(here("data", "ransom", "Egentliga Finland_11_16_2.jpeg"))
+```
+
+Function to get images
+
+```{r}
+image_pre_process <- function(path) {
+  message("Reading in image")
+  pdf <- image_read_pdf(path)
+  
+  message("Converting image")
+  jpeg <- image_convert(pdf, format = "jpeg")
+  
+  message("Getting number of pages")
+  n_pages <- magick::image_info(jpeg) %>% nrow()
+  
+  for (i in 1:n_pages){
+    message(paste0("Transforming and saving image ", i))
+      page <- jpeg[i]
+      
+      page <- page %>% 
+        image_deskew(threshold = 80) %>% 
+        image_quantize(max = 255, colorspace = "gray", dither = T)
+      
+      page %>% image_write(glue::glue(here("data", "ransom", "Egentliga Finland_11_16_{i}_255_gray_dither.jpeg")))
+  
+  }
+    
+}
+
+
+path <- here("data", "ransom", "Egentliga Finland_11_16.pdf")
+
+image_pre_process(path = path)
+```
+
+### Pre-processing image
+
+```{r}
+image <- image_read(here("data", "riksvakanslistan", "gold_standard_1.JPG"))
+
+image %>% 
+  image_deskew() %>% 
+  image_despeckle() %>% 
+  image_quantize(max = 255, colorspace = "gray", dither = T) %>% image_write(here("data", "riksvakanslistan", "gold_standard_1_processed.JPG"))
+
+```
+
+```{r}
+files <- list.files(here("data", "ransom")) %>% 
+  as_tibble() %>% 
+  filter(str_detect(value, "\\.jpeg"))
+
+files %>% write.csv(here("data", "ransom", "images_to_upload.csv"))
+```
+
+
+```{python}
+import pandas as pd
+
+files = pd.read_csv(here("data/ransom/images_to_upload.csv"))
+
+client_s3 = boto3.client('s3', region_name='us-west-2')
+
+client_s3.upload_file(
+  Filename=here("data/ransom/Egentliga Finland_11_16_1_255_gray_dither.jpeg"), 
+  Bucket="swedish-patent-data")
+```
+
+
+```{python}
+
+
+client_s3.upload_file('images/image_0.jpg', 'mybucket', 'image_0.jpg')
+
+for i in files:
+  print(i)
+  
+  
+  
+  client_s3.upload_file(print(here("data/ransom/", i), 'swedish-patent-data', i)
+  
+
+
+
+```
+
+
+```{python}
+response = client.analyze_document(
+  Document = {
+  'S3Object': {
+    'Bucket': 'swedish-patent-data',
+    'Name': 'finland-ransom/Egentliga Finland_11_16_1_255_gray_dither.jpeg'
+  }
+  },
+  FeatureTypes=["TABLES", "FORMS"]
+  
+})
+
+print(response)
+```
+
+
+```{python}
+
+file = "data/riksvakanslistan/top-left-table.PNG"
+from pyprojroot import here
+
+here("data/riksvakanslistan/top-left-table.PNG")
+
+textract_python_table_parser.py here("data/riksvakanslistan/top-left-table.PNG")
+
+```
+
+
+```{r}
+image <- image_read(here("data", "riksvakanslistan", "kontor.PNG"))
+
+image %>% 
+  # have to tune this parameter
+  image_deskew(threshold = 1000) %>% 
+  image_despeckle() %>% 
+  image_quantize(max = 255, colorspace = "gray", dither = T) %>% image_write(here("data", "riksvakanslistan", "kontor_processed.PNG"))
+
+image <- image_read(here("data", "riksvakanslistan", "kontor_processed.PNG"))
+
+text <- image %>% 
+  image_ocr(language = "swe")
+
+
+text %>% write_rds(here("data", "riksvakanslistan", "text.rds"))
+  as_tibble() %>% 
+  separate_rows(value, sep = "\\;") %>% 
+  mutate(value = str_remove(value, "Kontor i:"),
+         value = str_squish(value)) %>% 
+  separate(value, into = c("Region", "Offices"), sep = "\\:") %>% 
+  mutate(Offices = str_squish(Offices))
+
+cities <- text %>% 
+  as_tibble() %>% 
+  separate_rows(value, sep = "\\;") %>% 
+  mutate(value = str_remove(value, "Kontor i:"),
+         value = str_squish(value)) %>% 
+  separate_rows(value, sep = "\\:|\\,") %>% 
+  mutate(value = str_squish(value))
+```
+
+Geocoding
+
+```{r}
+library(tidygeocoder)
+
+
+  
+
+census_s1 <- cities %>% 
+  mutate(city = str_c(value, ", Sweden")) %>%
+  geocode(address = city, verbose = TRUE)
+
+# census_s1 %>% write_rds("data/riksvakanslistan/office_locations.rds")
+
+library(sf)
+
+census_s1 %>% 
+  ggplot(aes(long, lat, label = city)) +
+  geom_point() +
+  coord_sf() +
+  borders(regions = "Sweden")
+```
+
+
+```{r}
+c("Södertälje",
+  "Norrtälje",
+  "Enköping",
+  "Tierp",
+  "Skutskärp",
+  "Nyköping",
+  "Strängnäs",
+  "Katrineholm",
+  "Gnesta",
+  "Flen",
+  "")
 ```
 

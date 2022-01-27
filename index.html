@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Riksvakanslistan</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Jonathan Jayes" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+    <link href="libs/panelset-0.2.6/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset-0.2.6/panelset.js"></script>
+    <script src="libs/xaringanExtra-progressBar-0.0.1/progress-bar.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Riksvakanslistan
+## A high-frequency source of occupational titles in Sweden: 1916-1958
+### Jonathan Jayes
+### <a href="https://interludeone.com/">Lund University</a> 27 January, 2022
+
+---
+
+
+class: inverse
+
+
+
+
+
+<style>.xe__progress-bar__container {
+  top:0;
+  opacity: 1;
+  position:absolute;
+  right:0;
+  left: 0;
+}
+.xe__progress-bar {
+  height: 5px;
+  background-color: #EB821D;
+  width: calc(var(--slide-current) / var(--slide-total) * 100%);
+}
+.remark-visible .xe__progress-bar {
+  animation: xe__progress-bar__wipe 200ms forwards;
+  animation-timing-function: cubic-bezier(.86,0,.07,1);
+}
+@keyframes xe__progress-bar__wipe {
+  0% { width: calc(var(--slide-previous) / var(--slide-total) * 100%); }
+  100% { width: calc(var(--slide-current) / var(--slide-total) * 100%); }
+}</style>
+
+
+# Riksvakanslistan
+
+.pull-left[
+
+## Plan
+
+1. [What is the source?](#source)
+
+2. [Where does it fit in?](#fit)
+
+3. [How can we digitize it?](#digitize)
+
+
+]
+
+.pull-right[
+
+&lt;img src="data/riksvakanslistan/riksvakanslistan_21_09_1927_small_tall.jpg" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+---
+
+class: inverse, center, middle
+name: source
+
+# What is the source?
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+
+---
+
+# Riksvakanslistan
+
+&lt;img src="data/riksvakanslistan/riksvakanslistan_21_09_1927_small.jpg" style="display: block; margin: auto;" /&gt;
+
+---
+# Components
+
+.panelset[
+.panel[.panel-name[Table of vacancies]
+
+&lt;img src="data/riksvakanslistan/top-left-table.PNG" width="1088" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+.panel[.panel-name[Job seekers]
+
+]
+
+.panel[.panel-name[Special announcements]
+
+]]
+
+
+
+---
+# Components
+
+.panelset[
+.panel[.panel-name[Occupational types]
+
+
+|Occupation        |English translation  |
+|:-----------------|:--------------------|
+|Jordbruksarbete   |Agricultural work    |
+|Yrkesarbete       |Professional work    |
+|Husligt arbete    |Domestic work        |
+|Hotellrörelse     |Hospitality          |
+|Kontor och handel |Officework and trade |
+
+]
+
+
+.panel[.panel-name[Occupational rankings]
+
+.pull-left[
+
+
+|Occupation     |English translation |
+|:--------------|:-------------------|
+|Mejerinnor     |Dairy maids         |
+|Mejerijungfrur |Dairy girls         |
+|Mejerielever   |Dairy students      |
+
+
+]
+
+.pull-right[
+
+&lt;img src="data/riksvakanslistan/mejerinnor.png" width="496" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+]
+
+.panel[.panel-name[Required skills]
+
+
+|Vacancy ad                                                                                                                                                                                                                                                                                   |English translation                                                                                                                                                                                                                                                                                                                  |
+|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|Handelsbiträde - dekoratör - fri från värnplikt, vana i manufaktur- eller porslins- och glasbranschen, med god smak för skyltning samt kunnig i texting, erhåller anställning i Borås den 1 okt. Begynnelselön 200 kr. per månad. Vidare infromation meddelar Arbetsförmedlingen i Göteborg. |Sales assistant - decorator - free from military service, used to the manufacturing or porcelain and glass industry, with good taste for signage and knowledgeable in texting, will be employed in Borås on 1 October. Starting salary SEK 200. per month. Further information is provided by the Swedish Public Employment Service. |
+
+
+]]
+
+
+---
+
+# Where are the offices?
+
+&lt;img src="index_files/figure-html/unnamed-chunk-11-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: inverse, center, middle
+name: fit
+
+# Where does it fit in?
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+
+---
+
+# Existing occupational title records
+
+&lt;img src="index_files/figure-html/unnamed-chunk-12-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: inverse, center, middle
+name: digitize
+
+# How can we digitize it?
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+class: centre, inverse, middle
+
+# Regular extraction pipeline
+
+- On my local machine
+
+- Based on regular expression
+
+- Works fine for text
+
+---
+
+# Regular extraction pipeline
+
+.panelset[
+.panel[.panel-name[Pre-processing image]
+
+.pull-left[
+
+
+```r
+image &lt;- image_read(here("data", "riksvakanslistan", "kontor.PNG"))
+
+image %&gt;% 
+  # tune this parameter
+  image_deskew(threshold = 1000) %&gt;% 
+  image_despeckle() %&gt;% 
+  # makes grayscale
+  image_quantize(max = 255, 
+                 colorspace = "gray", 
+                 dither = T) %&gt;% 
+  image_write(here("data", "riksvakanslistan", "kontor_processed.PNG"))
+```
+
+
+]
+
+.pull-right[
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="data/riksvakanslistan/kontor.PNG" alt="Original image" width="2169" /&gt;
+&lt;p class="caption"&gt;Original image&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="data/riksvakanslistan/kontor_processed.PNG" alt="Processed image" width="2176" /&gt;
+&lt;p class="caption"&gt;Processed image&lt;/p&gt;
+&lt;/div&gt;
+
+]
+
+]
+
+.panel[.panel-name[Extract text]
+
+.pull-left[
+
+
+```r
+library(tesseract)
+
+text &lt;- image %&gt;% 
+  # use Swedish language model
+  image_ocr(language = "swe")
+
+text
+```
+
+]
+
+.pull-right[
+
+
+|Text                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|Kontor i: Stockholm: Södertälje, Norrtälje; Uppsala: Enköping, Tierp, Skutskär; Eskilstuna: Nyköping, Sträng C — Flen; Norrköping; Linköping: Söderköping, Skänninge, Vadstena, Motala, Valdemarsvik, Mjölby, Ode Östra Husby, Finspong, Borensberg; Jönköping: Eksjö, Nässjö, Tranås, Vetlanda, Värnamo, Gislaved; Växjö: Ljungby, Älmhult; Väs Kalmar: Nybro, Torsås; Visby; Karlskrona: Ronneby, Karlshamn, Sölvesborg; Kristianstad: Hässleholm, Ängelholm, Tomelilla, Å M ) Landskrona, Hälsingborg, Ystad, Trälleborg, Eslöv, Skurup; Halmstad: Laholm, Falkenberg, Varberg, Kungsbacka; Göteborg; Uddevalla: S Lysekil, Marstrand, Kungälv; Vänersborg: Borås, Alingsås, Trollhättan; Skara: Mariestad, Tidaholm, Vara, Skövde; Karlstad: Kristineha Filips Arvika, Säffle; Örebro: Askersund, Lindesberg, Karlskoga, Kopparberg; Västerås: Sala, Köping, Arboga; Falun: Avesta, Mora, Leksand. L Gävle: Söderhamn, Hudiksvall, Ljusdal, Storvik, Harmånger, Bollnäs; Sundsvall: Härnösand, Sollefteå; Östersund: Strömsund, Sveg: Umeå Skellefteå ; Luleå: Piteå, Kiruna, Boden. Fn a ET |
+
+]
+]
+
+
+.panel[.panel-name[Transform text]
+
+.pull-left[
+
+
+```r
+text %&gt;% 
+  as_tibble() %&gt;% 
+  separate_rows(value, sep = "\\;") %&gt;% 
+  mutate(value = str_remove(value, "Kontor i:"),
+         value = str_squish(value)) %&gt;% 
+  separate(value, into = c("Region", "Offices"), sep = "\\:") %&gt;% 
+  mutate(Offices = str_squish(Offices))
+```
+
+]
+
+.pull-right[
+
+
+|Region     |Offices                                                                                               |
+|:----------|:-----------------------------------------------------------------------------------------------------|
+|Stockholm  |Södertälje, Norrtälje                                                                                 |
+|Uppsala    |Enköping, Tierp, Skutskär                                                                             |
+|Eskilstuna |Nyköping, Sträng C — Flen                                                                             |
+|Linköping  |Söderköping, Skänninge, Vadstena, Motala, Valdemarsvik, Mjölby, Ode Östra Husby, Finspong, Borensberg |
+|Jönköping  |Eksjö, Nässjö, Tranås, Vetlanda, Värnamo, Gislaved                                                    |
+|Växjö      |Ljungby, Älmhult                                                                                      |
+
+
+]
+]]
+
+---
+
+class: centre, inverse, middle
+
+# AWS Extraction pipeline
+
+- Uses fancy Amazon services Textract and Comprehend
+
+- Based on deep learning
+
+- Works well for tables when you have a good quality scan
+
+---
+
+# AWS Extraction pipeline
+
+&lt;img src="data/riksvakanslistan/AWS_pipeline (1).svg" style="display: block; margin: auto;" /&gt;
+
+---
+# AWS Extraction pipeline
+
+### Demo:
+
+.pull-left[
+
+&lt;img src="data/riksvakanslistan/gold_standard_1_processed.JPG" style="display: block; margin: auto;" /&gt;
+
+]
+
+.pull-right[
+
+
+|          |1929 |1930  |1931 |1931 |1931  |1931 |
+|:---------|:----|:-----|:----|:----|:-----|:----|
+|          |end  |of- - |Jan. |Apl. |June. |Aug. |
+|Wheat     |107  |53    |52   |55   |53    |47   |
+|Maize     |74   |44    |38   |49   |39    |35   |
+|Butter    |85   |64    |64   |58   |56    |57   |
+|Tea       |81   |90    |88   |76   |69    |55   |
+|Coffee    |69   |51    |49   |54   |41    |41   |
+|Cotton    |89   |51    |51   |54   |45    |37   |
+|Wool Tops |68   |48    |46   |51   |47    |48   |
+|Jute      |87   |51    |47   |50   |52    |48   |
+|Pig Iron  |110  |96    |90   |89   |89    |89   |
+|Copper    |99   |67    |65   |62   |51    |47   |
+|Tin       |80   |50    |52   |51   |47    |51   |
+|Rubber    |93   |53    |48   |36   |35    |29   |
+
+
+]
+
+---
+# Useful Resources:
+
+A [recorded talk](https://www.kellogg.northwestern.edu/news-events/conference/methodological-advances-2021.aspx) from the Methodological Advances in the Extraction and Analysis of Historical Data conference and the [accompanying paper](https://www.angelavossmeyer.com/uploads/5/6/6/2/56627489/northwestern_exeh_amujalavossmeyerdas_paper.pdf) from Angela Vossmeyer and coauthors are a great place to start if you want to do your own digitization with AWS.
+
+&lt;iframe src="https://www.kellogg.northwestern.edu/news-events/conference/methodological-advances-2021.aspx" width="100%" height="400px" data-external="1"&gt;&lt;/iframe&gt;
+
+---
+
+class: center, inverse, middle
+
+# Thank you
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
