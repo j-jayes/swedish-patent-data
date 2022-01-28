@@ -292,7 +292,7 @@ text <- image %>%
   image_ocr(language = "swe")
 
 
-text %>% write_rds(here("data", "riksvakanslistan", "text.rds"))
+text %>% 
   as_tibble() %>% 
   separate_rows(value, sep = "\\;") %>% 
   mutate(value = str_remove(value, "Kontor i:"),

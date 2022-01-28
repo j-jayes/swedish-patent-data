@@ -78,10 +78,15 @@ get_patent_info <- function(patent_url) {
     str_squish() %>%
     str_remove(., " - Google Patents")
   
+# abstract
+  abstract <- html %>% 
+    html_nodes(".abstract") %>% 
+    html_text(trim = T)
+  
 # text
   description_text <- html %>%
     html_nodes(".description-paragraph") %>%
-    html_nodes(".notranslate") %>%
+    # html_nodes(".notranslate") %>%
     # html_nodes("span") %>%
     html_text(trim = T) %>%
     as_tibble() %>%
@@ -162,16 +167,19 @@ forwardReferences_assigneeOriginals <- html %>%
   concepts <- tibble(ids, names, counts) %>%
     nest(concepts = c(ids, names, counts))
   
-  output <- tibble(title, 
-         description_text,
-         concepts,
-         claims_text,
-         countries,
-         forwardReferences_links,
-         forwardReferences_p_numbers,
-         forwardReferences_p_langs,
-         forwardReferences_p_dates,
-         forwardReferences_assigneeOriginals)
+  output <- tibble(
+    title,
+    abstract,
+    description_text,
+    concepts,
+    claims_text,
+    countries,
+    forwardReferences_links,
+    forwardReferences_p_numbers,
+    forwardReferences_p_langs,
+    forwardReferences_p_dates,
+    forwardReferences_assigneeOriginals
+  )
   
   output
 }
@@ -204,5 +212,49 @@ test <- list_of_pages %>%
 
 ```{r}
 test %>% unnest(patent_info) %>% view
+```
+
+
+
+
+
+Reworking
+
+```{r}
+html %>% 
+  html_nodes("h2")
+
+html %>% 
+  html_nodes("table") %>% 
+  html_table()
+
+
+tables <- html %>% 
+  html_table()
+
+tables_1 <- map_dfr(tables[-1], ~ nest(.)) %>% 
+  mutate(table = row_number()) 
+
+tables_1 %>% 
+  head(1) %>% 
+  unnest(data) %>% 
+  pivot_longer(c(everything(), - table), names_to = "names", values_to = "value") %>% 
+  mutate(value = str_squish(value))
+
+do_to_tbl <- function(tbl) {
+  tbl %>% 
+    pivot_longer(c(everything()), names_to = "names", values_to = "value") %>%
+    mutate(value = str_squish(value)) %>% 
+    nest(contents = everything())
+}
+
+test <- tables_1 %>%
+  mutate(test = map_df(data, do_to_tbl))
+
+test %>% unnest(test) %>% 
+  unnest(contents) %>%
+  filter(table == 6) %>% 
+  pivot_wider(names_from = names, values_from = value) %>% 
+  janitor::clean_names()
 ```
 
