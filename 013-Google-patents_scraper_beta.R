@@ -184,9 +184,17 @@ get_patent_info <- function(patent_url) {
 #' ## Iterator
 #' 
 ## --------------------------------------------------------------------------------------------------------------
+# testing
+
+list_of_pages <- tibble(
+  id = "1",
+  patent_url = "https://stackoverflow.com/questions/52505923/error-in-bind-rows-x-id-argument-1-must-have-names"
+) %>% bind_rows(list_of_pages)
+list_of_pages
+
 test <- list_of_pages %>% 
-  slice_sample(n = 20) %>% 
-  mutate(patent_info = map_df(patent_url, possibly(get_patent_info, "failed")))
+  slice_head(n = 3) %>% 
+  mutate(patent_info = map_df(patent_url, possibly(get_patent_info, tibble(failed = "failed"))))
 
 st <- format(Sys.time(), "%Y-%m-%d-%I-%M-%p")
 
