@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #' 
 ## --------------------------------------------------------------------------------------------------------------
-knitr::purl("code/013-Google-patents_scraper_beta.Rmd", documentation = 2)
+# knitr::purl("code/013-Google-patents_scraper_beta.Rmd", documentation = 2)
 
 #' 
 #' # Purpose
@@ -39,12 +39,11 @@ knitr::purl("code/013-Google-patents_scraper_beta.Rmd", documentation = 2)
 # or
 library(tidyverse)
 library(rvest)
-library(here)
 
 
 #' 
 ## --------------------------------------------------------------------------------------------------------------
-df <- read_rds(here("data", "patent-info-google", "Electricity_patents_list_Google_Patents.rds"))
+df <- read_rds("data/patent-info-google/Electricity_patents_list_Google_Patents.rds")
 
 list_of_pages <- df %>% 
   select(id, patent_url = result_link)
@@ -192,6 +191,6 @@ test <- list_of_pages %>%
 st <- format(Sys.time(), "%Y-%m-%d-%I-%M-%p")
 
 test %>% 
-  write_rds(here("data", "patent-info-google", paste0("patent_df_test_", st, ".rds")), compress = "gz")
+  write_rds(paste0("data/patent-info-google/patent_df_test_", st, ".rds"), compress = "gz")
 
 #' 
