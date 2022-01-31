@@ -1,35 +1,35 @@
----
-title: "Google Patents Scraper"
-author: "JJayes"
-date: "20/01/2022"
-output: html_document
----
-
-```{r setup, include=FALSE}
+#' ---
+#' title: "Google Patents Scraper"
+#' author: "JJayes"
+#' date: "20/01/2022"
+#' output: html_document
+#' ---
+#' 
+## ----setup, include=FALSE--------------------------------------------------------------------------------------
 knitr::opts_chunk$set(echo = TRUE)
-```
 
-```{r}
+#' 
+## --------------------------------------------------------------------------------------------------------------
 knitr::purl("code/013-Google-patents_scraper_beta.Rmd", documentation = 2)
-```
 
-# Purpose
-
-Scraping google patents for information about electricity related patents in Sweden.
-
-# Process
-
-Has three parts:
-
-1. List of pages to scrape
-
-2. Scraper script
-
-3. Iterator
-
-## List of pages to scrape
-
-```{r}
+#' 
+#' # Purpose
+#' 
+#' Scraping google patents for information about electricity related patents in Sweden.
+#' 
+#' # Process
+#' 
+#' Has three parts:
+#' 
+#' 1. List of pages to scrape
+#' 
+#' 2. Scraper script
+#' 
+#' 3. Iterator
+#' 
+#' ## List of pages to scrape
+#' 
+## --------------------------------------------------------------------------------------------------------------
 # library(dplyr)
 # library(readr)
 # library(stringr)
@@ -41,40 +41,40 @@ library(tidyverse)
 library(rvest)
 library(here)
 
-```
 
-```{r}
+#' 
+## --------------------------------------------------------------------------------------------------------------
 df <- read_rds(here("data", "patent-info-google", "Electricity_patents_list_Google_Patents.rds"))
 
 list_of_pages <- df %>% 
   select(id, patent_url = result_link)
-```
 
-## Scraper Script
-
-Things I want from the patent page:
-
-* Title
-* Description and claims text
-* Countries where patent is registered
-* Other citations
-* Forward links to other patents
-* Patents that this patent cites
-* Also published as
-* Similar documents
-* Concepts that are mentioned in the patent
-
-```{r}
+#' 
+#' ## Scraper Script
+#' 
+#' Things I want from the patent page:
+#' 
+#' * Title
+#' * Description and claims text
+#' * Countries where patent is registered
+#' * Other citations
+#' * Forward links to other patents
+#' * Patents that this patent cites
+#' * Also published as
+#' * Similar documents
+#' * Concepts that are mentioned in the patent
+#' 
+## --------------------------------------------------------------------------------------------------------------
 pivot_long_in_nested_col <- function(tbl) {
   tbl %>% 
     pivot_longer(c(everything()), names_to = "key", values_to = "value") %>%
     mutate(value = str_squish(value)) %>% 
     nest(contents = everything())
 }
-```
 
-
-```{r}
+#' 
+#' 
+## --------------------------------------------------------------------------------------------------------------
 get_patent_info <- function(patent_url) {
   
   Sys.sleep(.5)
@@ -180,11 +180,11 @@ get_patent_info <- function(patent_url) {
   output
 }
 
-```
 
-## Iterator
-
-```{r}
+#' 
+#' ## Iterator
+#' 
+## --------------------------------------------------------------------------------------------------------------
 test <- list_of_pages %>% 
   slice_sample(n = 20) %>% 
   mutate(patent_info = map_df(patent_url, possibly(get_patent_info, "failed")))
@@ -193,5 +193,5 @@ st <- format(Sys.time(), "%Y-%m-%d-%I-%M-%p")
 
 test %>% 
   write_rds(here("data", "patent-info-google", paste0("patent_df_test_", st, ".rds")), compress = "gz")
-```
 
+#' 
