@@ -1,0 +1,23 @@
+---
+title: "014-Svensk-Patenttidning-scraper"
+author: "JJayes"
+date: "01/02/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+The PRV has [pdf copies online](https://www.prv.se/sv/patent/webbpublikationer/svensk-patenttidning/aldre-utgavor/) of the Svensk Patenttidning or Swedish patent newspaper that lists every patent registered from 1968 onwards.
+
+```{r}
+library(tidyverse)
+library(rvest)
+
+df <- `Electricity_patents_list_prv_19-01-22`
+
+df
+```
+

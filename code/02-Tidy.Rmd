@@ -9,3 +9,127 @@ output: html_document
 library(tidyverse)
 ```
 
+
+
+### Looking at google patent data
+
+Read in data and remove missing values and combine cols
+
+```{r}
+df <- `patent_df_1_10002022-01-31-04-14-pm` %>% 
+  bind_rows(`patent_df_1001_30002022-01-31-05-29-pm`) %>% 
+  bind_rows(`patent_df_test_3000_80002022-02-01-03-34-am`) %>% 
+  bind_rows(`patent_df_test_8000_130002022-02-01-03-34-am`)
+
+df <- df %>% 
+  unnest(patent_info)
+
+df <- df %>% 
+  unnest(filing_date)
+
+df <- df %>% 
+  unnest(tables)
+```
+
+## Getting rid of missing in desc_text
+
+```{r}
+df_no_desc_text <- df %>% 
+  filter(description_text == "missing") %>% 
+  select(-description_text) 
+
+df_desc_text <- df %>% 
+  filter(description_text != "missing") %>% 
+  unnest(description_text)
+
+df <- df_no_desc_text %>% 
+  bind_rows(df_desc_text)
+```
+
+## Getting rid of missing in desc_text
+
+```{r}
+df_no_concepts <- df %>% 
+  filter(concepts == "missing") %>% 
+  select(-concepts) 
+
+df_concepts <- df %>% 
+  filter(concepts != "missing") %>% 
+  unnest(concepts)
+
+df <- df_no_concepts %>% 
+  bind_rows(df_concepts)
+```
+
+## Getting rid of missing in claims_text
+
+```{r}
+df_no_claims <- df %>% 
+  filter(claims_text == "missing") %>% 
+  select(-claims_text) 
+
+df_claims <- df %>% 
+  filter(claims_text != "missing") %>% 
+  unnest(claims_text)
+
+df <- df_no_claims %>% 
+  bind_rows(df_claims)
+```
+
+## Getting rid of missing in countries
+
+```{r}
+df_no_claims <- df %>% 
+  filter(countries == "missing") %>% 
+  select(-countries) 
+
+df_claims <- df %>% 
+  filter(countries != "missing") %>% 
+  unnest(countries)
+
+df <- df_no_claims %>% 
+  bind_rows(df_claims)
+```
+
+## Getting rid of missing in countries
+
+```{r}
+df_no_claims <- df %>% 
+  filter(countries == "missing") %>% 
+  select(-countries) 
+
+df_claims <- df %>% 
+  filter(countries != "missing") %>% 
+  unnest(countries)
+
+df <- df_no_claims %>% 
+  bind_rows(df_claims)
+```
+
+
+```{r}
+df %>% 
+  select(filing_date, id, concepts) %>% 
+  unnest(concepts) %>% view
+
+df %>% filter(id == "SE-320744-B") %>% 
+  # pull(tables) %>% 
+  unnest(tables) %>% 
+  unnest(contents) %>% 
+  select(key, value, table) %>% view
+
+```
+
+
+### Write it out
+
+```{r}
+df %>% 
+  filter(between(row_number(), 1, 9000)) %>% 
+  write_rds("data/patent-info-google/patent_df_cleaned_1.rds", compress = "gz")
+
+df %>% 
+  filter(between(row_number(), 9001, 13000)) %>% 
+  write_rds("data/patent-info-google/patent_df_cleaned_2.rds", compress = "gz")
+```
+
