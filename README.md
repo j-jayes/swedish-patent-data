@@ -8,6 +8,7 @@ The bigger project will look at to what extent the patents introduce labour augm
 
 ## Process
 
-I've made a scraper to get the patent information and PDFs. Currently I'm being blocked by the server because it is clear I am a bot. I've emailed the provider of the patents and await their response.
+I have scraped Google Patents for 10,000 patents that were registered in Sweden. I am now working to analyse these.
 
-In the meantime I've begun to work on the pipeline to extract the text from the patents and then translate them into english.
+From the [PRV](https://data.prv.se/) I will access the XML data on applications from 1973-2017. For patents prior to this, I have to download the PDFs manually it seems. My scraper is being blocked.
+
