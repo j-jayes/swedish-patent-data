@@ -80,5 +80,19 @@ get_occupation_info <- function(url) {
 ```
 
 
+### Translate!
 
+```{r}
+df <- read_rds("data/SCB-occupations/ssyk_descriptions.rds")
+
+df %>% mutate(nchar = nchar(description)) %>% 
+  ggplot(aes(nchar)) +
+  geom_histogram()
+```
+
+### Put csv on Github
+
+```{r}
+# df %>% write.csv("data/SCB-occupations/ssyk_descriptions.csv")
+```
 
