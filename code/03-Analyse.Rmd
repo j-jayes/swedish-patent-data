@@ -117,6 +117,79 @@ dev.off()
 ```
 
 
-### More from google patents
+### More from google patents with the scraped data
 
+```{r}
+df <- read_rds("data/patent-info-google/patent_df_cleaned_1.rds") %>% 
+  bind_rows(read_rds("data/patent-info-google/patent_df_cleaned_2.rds"))
+```
+
+
+```{r}
+df %>% 
+  select(countries) %>% 
+  mutate(n = str_count(countries, ",")) %>% 
+  count(n) %>% 
+  tail
+
+df_countries <- df %>% 
+  select(countries) %>% 
+  separate(countries, into = c(paste0("ctry_", rep(1:45, 1))))
+```
+
+```{r}
+library(recipes)
+
+dummy_multi_choice_rec <- recipe(~ ., data = df_countries) %>%
+  step_dummy_multi_choice(starts_with("ctry_")) %>%
+  prep()
+
+df_countries <- bake(dummy_multi_choice_rec, new_data = NULL)
+```
+
+```{r}
+library(corrr)
+df_countries %>%
+  select(starts_with("ctry_")) %>%
+  rename_with(.cols = everything(), ~ str_remove(.x, "ctry_1_")) %>%
+  correlate() %>% 
+  filter(term != "SE") %>% 
+  select(-SE) %>% 
+  rearrange() %>%
+  shave() %>%
+  rplot(shape = 15, colours = c("midnightblue", "white", "darkorange"))
+
+df %>%
+  select(starts_with("ing_1")) %>%
+  rename_with(.cols = everything(), ~ str_remove(.x, "ing_1_")) %>% 
+  correlate() %>% 
+  network_plot()
+```
+
+Maybe filter it more
+
+```{r}
+df_countries <- df %>% 
+  select(countries)
+
+countries_12 <- df_countries %>% 
+  separate_rows(countries) %>% 
+  count(countries) %>% 
+  slice_max(n, n = 13) %>% 
+  filter(countries != "SE") %>% 
+  pull(countries)
+
+df_countries %>% 
+  mutate(rn = row_number()) %>% 
+  separate_rows(countries) %>% 
+  filter(countries %in% countries_12) %>% 
+  pivot_wider(names_from = rn, values_from = countries, names_prefix = "id_") %>% 
+  mutate(across(everything(), as.character))
+
+
+
+  separate(countries, into = c(paste0("ctry_", rep(1:45, 1)))) %>% 
+  mutate(across(everything(), str_detect(., countries_12$)))
+
+```
 

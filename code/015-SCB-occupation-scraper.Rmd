@@ -1,0 +1,84 @@
+---
+title: "Untitled"
+author: "JJayes"
+date: "02/02/2022"
+output: html_document
+---
+
+### Scraping info from SCB's website.
+
+
+
+```{r}
+library(tidyverse)
+
+df <- readxl::read_excel("data/SCB-occupations/ssyk_index_webb_2022.xlsx")
+
+df <- df %>% 
+  janitor::clean_names() %>% 
+  mutate(ssyk_2012_kod = as.character(ssyk_2012_kod),
+         ssyk_2012_kod  = ifelse(nchar(ssyk_2012_kod) == 3, str_c("0", ssyk_2012_kod ), ssyk_2012_kod ))
+```
+
+How many specific occupations?
+
+```{r}
+codes <- df %>% 
+  distinct(ssyk_2012_kod)
+```
+
+430
+
+```{r}
+codes <- codes %>% 
+  mutate(url = str_c("https://www.h5.scb.se/yreg/SSYKBeskr2012.asp?id=", ssyk_2012_kod))
+```
+
+
+### Function to get info
+
+```{r}
+library(rvest)
+
+get_occupation_info <- function(url) {
+  message(paste0("Getting info about code: ", url))
+  Sys.sleep(.5)
+  html <- read_html(url)
+
+  table <- html %>%
+    html_table()
+
+  table <- table[[1]]
+
+  table %>%
+    pivot_longer(everything()) %>%
+    distinct(value) %>%
+    mutate(cols = c("code", "title", "description")) %>%
+    pivot_wider(names_from = cols)
+}
+```
+
+
+```{r}
+# codes_desc <- codes %>% 
+#   # head() %>% 
+#   mutate(info = map(url, possibly(get_occupation_info, "failed")))
+# 
+# codes_desc_1 <- codes_desc %>% 
+#   filter(info != "failed") %>% 
+#   unnest(info) 
+# 
+# codes_desc_2 <- codes_desc %>% 
+#   filter(info == "failed") %>% 
+#   mutate(info = map(url, possibly(get_occupation_info, "failed")))
+# 
+# codes_desc_2 %>%
+#   filter(info != "failed") %>% 
+#   unnest(info) %>% 
+#   bind_rows(codes_desc_1) %>%
+#   write_rds("data/SCB-occupations/ssyk_descriptions.rds")
+```
+
+
+
+

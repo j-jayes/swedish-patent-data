@@ -124,12 +124,12 @@ df %>% filter(id == "SE-320744-B") %>%
 ### Write it out
 
 ```{r}
-df %>% 
-  filter(between(row_number(), 1, 9000)) %>% 
-  write_rds("data/patent-info-google/patent_df_cleaned_1.rds", compress = "gz")
-
-df %>% 
-  filter(between(row_number(), 9001, 13000)) %>% 
-  write_rds("data/patent-info-google/patent_df_cleaned_2.rds", compress = "gz")
+# df %>% 
+#   filter(between(row_number(), 1, 9000)) %>% 
+#   write_rds("data/patent-info-google/patent_df_cleaned_1.rds", compress = "gz")
+# 
+# df %>% 
+#   filter(between(row_number(), 9001, 13000)) %>% 
+#   write_rds("data/patent-info-google/patent_df_cleaned_2.rds", compress = "gz")
 ```
 
