@@ -96,3 +96,115 @@ df %>% mutate(nchar = nchar(description)) %>%
 # df %>% write.csv("data/SCB-occupations/ssyk_descriptions.csv")
 ```
 
+Used Mbart50 to translate on a Google Colab workbook.
+
+```{r}
+# read in translations and combine.
+df <- read.csv("data/SCB-occupations/df_translated.csv")
+
+df <- df %>% 
+  as_tibble() %>% 
+  mutate(ssyk_2012_kod = as.character(ssyk_2012_kod),
+         ssyk_2012_kod  = ifelse(nchar(ssyk_2012_kod) == 3, str_c("0", ssyk_2012_kod ), ssyk_2012_kod )) %>% 
+  select(ssyk_2012_kod, english)
+
+df_orig <- read_rds("data/SCB-occupations/ssyk_descriptions.rds")
+
+df <- df_orig %>% 
+  inner_join(df, by = "ssyk_2012_kod")
+
+df <- df %>% 
+  mutate(english = str_remove(english, "\\['"),
+         english = str_remove(english, "'\\]"),
+         english = str_remove(english, '\\["'),
+         english = str_remove(english, '"\\]'))
+
+# df %>% write_rds("data/SCB-occupations/df_translated_joined.rds")
+```
+
+Explore words
+
+```{r}
+library(tidytext)
+
+df <- read_rds("data/SCB-occupations/df_translated_joined.rds")
+
+df %>% 
+  unnest_tokens(word, english) %>% 
+  anti_join(stop_words) %>% 
+  count(word, sort = T)
+
+```
+
+
+## Modelling
+
+I want to do UMAP based on TF-IDF in the english descriptions - will colour the dots based on code and plot them on a UMAP 2d space.
+
+```{r}
+df_mod <- df %>% 
+  select(code, english)
+
+df_mod <- df_mod %>% 
+  mutate(group_1 = str_extract(code, "[0-9]"))
+
+library(recipes)
+library(textrecipes)
+# library(embed)
+
+pca_rec <- recipe(code ~ ., data = df_mod) %>% 
+  update_role(code, group_1, new_role = "id") %>% 
+  step_tokenize(english) %>% 
+  # step_stopwords(english) %>% 
+  step_tokenfilter(english, max_tokens = 50) %>% 
+  step_tfidf(english) %>% 
+  step_pca(all_numeric_predictors())
+
+pca_juiced <- pca_rec %>% prep() %>% juice()
+
+pca_juiced %>% 
+  ggplot(aes(PC1, PC2, colour = group_1)) +
+  geom_point()
+```
+
+What can we say about the different components?
+
+```{r}
+pca_prep <- prep(pca_rec)
+
+pca_comps <- tidy(pca_prep, 4) %>% 
+  filter(component %in% paste0("PC", 1:4)) %>% 
+  group_by(component) %>% 
+  top_n(8, abs(value)) %>% 
+  ungroup()
+
+
+pca_comps %>% 
+  mutate(terms = str_remove(terms, "tfidf_english_"),
+         sign = value > 0,
+         value = abs(value),
+         terms = fct_reorder(terms, value)) %>% 
+  ggplot(aes(value, terms, fill = sign)) +
+  geom_col() +
+  facet_wrap(~ component, scales = "free")
+```
+
+
+
+Do with UMAP
+
+```{r}
+pca_rec <- recipe(code ~ ., data = df_mod) %>% 
+  update_role(code, group_1, new_role = "id") %>% 
+  step_tokenize(english) %>% 
+  step_tokenfilter(english, max_tokens = 50) %>% 
+  step_tfidf(english) %>% 
+  step_pca(all_numeric_predictors())
+
+pca_juiced <- pca_rec %>% prep() %>% juice()
+
+pca_juiced %>% 
+  ggplot(aes(PC1, PC2, colour = group_1)) +
+  geom_point()
+```
+
