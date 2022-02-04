@@ -219,10 +219,21 @@ umap_rec <- recipe(code ~ ., data = df_mod) %>%
 
 umap_juiced <- umap_rec %>% prep() %>% juice()
 
+jpeg(filename = "figures/SCB-occupations/UMAP_SCB.jpeg",
+     height = 8,
+     width = 12,
+     units = "in",
+     res = 1000)
+
+
 umap_juiced %>% 
   ggplot(aes(UMAP1, UMAP2, colour = occ_group_name)) +
   geom_point() +
-  labs(colour = "Occupational group")
+  labs(colour = "Occupational group",
+       x = "UMAP Component 1",
+       y = "UMAP Component 2")
+
+dev.off()
 ```
 
 ## What is most specific about each occupational class
@@ -271,8 +282,16 @@ bigram_log_odds %>%
 dev.off()
 ```
 
+### Table for desc stats
 
 ```{r}
-
+df %>% 
+  select(code, title, description, description_english = english) %>% 
+  filter(code %in% c("7311", "2642", "2113")) %>% 
+  gt(caption = "Example of occupational titles and descriptions") %>% 
+  cols_label(code = "SSYK",
+             title = "Title",
+             description = "Description",
+             description_english = "English translation")
 
 ```

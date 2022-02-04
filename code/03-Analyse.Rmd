@@ -179,17 +179,50 @@ countries_12 <- df_countries %>%
   filter(countries != "SE") %>% 
   pull(countries)
 
-df_countries %>% 
-  mutate(rn = row_number()) %>% 
-  separate_rows(countries) %>% 
-  filter(countries %in% countries_12) %>% 
-  pivot_wider(names_from = rn, values_from = countries, names_prefix = "id_") %>% 
-  mutate(across(everything(), as.character))
-
-
-
-  separate(countries, into = c(paste0("ctry_", rep(1:45, 1)))) %>% 
-  mutate(across(everything(), str_detect(., countries_12$)))
-
+df_countries <- df_countries %>% 
+  mutate(ctry_de = str_detect(countries, "DE"),
+         ctry_us = str_detect(countries, "US"),
+         ctry_gb = str_detect(countries, "GB"),
+         ctry_fr = str_detect(countries, "FR"),
+         ctry_jp = str_detect(countries, "JP"),
+         ctry_it = str_detect(countries, "IT"),
+         ctry_ca = str_detect(countries, "CA"),
+         ctry_nl = str_detect(countries, "NL"),
+         ctry_ch = str_detect(countries, "CH"),
+         ctry_be = str_detect(countries, "BE"),
+         ctry_es = str_detect(countries, "ES"),
+         ctry_au = str_detect(countries, "AU"))
 ```
 
+
+
+```{r}
+library(corrr)
+
+jpeg(
+    filename="figures/patent_country_corrs_top_12.jpeg",
+    width=8,
+    height=6,
+    units="in",
+    res=1000)
+
+df_countries %>%
+  select(starts_with("ctry_")) %>%
+  rename_with(.cols = everything(), ~ str_remove(.x, "ctry_")) %>%
+  rename_with(., toupper) %>% 
+  correlate() %>% 
+  rearrange() %>%
+  shave() %>%
+  rplot(shape = 15, colours = c("white", "white", "midnightblue"), print_cor = T)
+
+dev.off()
+```
+
+
+```{r}
+df_countries %>%
+  select(starts_with("ctry_")) %>%
+  rename_with(.cols = everything(), ~ str_remove(.x, "ctry_")) %>% 
+  correlate() %>% 
+  network_plot(colours = c("blue", "orange", "darkred"))
+```

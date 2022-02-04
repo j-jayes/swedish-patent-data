@@ -29,7 +29,7 @@ df <- df %>%
 df <- df %>% 
   mutate(abstract = str_replace(abstract, "missing", ""))
 
-# df <- df %>% tail(20)
+# df <- df %>% tail(50)
 ```
 
 ```{r}
@@ -38,16 +38,223 @@ df <- df %>% unnest(description_text) %>%
   mutate(description_text_c = paste0(value, collapse = " ")) %>% 
   ungroup() %>% 
   select(!value) %>% 
-  distinct()
+  distinct(patent_url, description_text_c, .keep_all = T)
 
 df <- df %>% 
   mutate(description_text_c = str_squish(str_c(abstract, description_text_c))) %>% 
   select(!abstract)
+
+# df %>% select(id, description_text_c, filing_date) %>% write_rds("data/patent-info-google/patent_text_data.rds", compress = "gz")
 ```
+
+## Things to do
+
+1. Make a plot of the commonly associated words - like a network plot to show the different clusters of wors.
+
+2. LDA to identify topics, perhaps over time. Try standard first
+
+### Network plot
 
 ```{r}
-# library(tidylo)
+df <- read_rds("data/patent-info-google/patent_text_data.rds")
 
-df
+eng_stopwords <- stop_words %>% filter(lexicon == "snowball")
+swe_stopwords <- stopwords(language = "sv") %>% as_tibble() %>% rename(word = value)
+
+df_desc_words <- df %>% 
+  head(1000) %>%   
+  unnest_tokens(bigram, description_text_c, token = "ngrams", n = 2) 
+  
+  
+bigrams_separated <- df_desc_words %>%
+  separate(bigram, c("word1", "word2"), sep = " ")
+
+bigrams_filtered <- bigrams_separated %>%
+  filter(!word1 %in% eng_stopwords$word) %>%
+  filter(!word2 %in% eng_stopwords$word) %>%
+  filter(!word1 %in% swe_stopwords$word) %>%
+  filter(!word2 %in% swe_stopwords$word) %>% 
+  filter(nchar(word1) > 2,
+         nchar(word2) > 2,
+         !word1 == "www",
+         !word2 == "www")
+
+# new bigram counts:
+bigram_counts <- bigrams_filtered %>% 
+  count(word1, word2, sort = TRUE)
+  
+
+library(igraph)
+library(ggraph)
+
+bigram_graph <- bigram_counts %>%
+  filter(n > 20) %>%
+  graph_from_data_frame()
+
+ggraph(bigram_graph, layout = "fr") +
+  geom_edge_link() +
+  geom_node_point() +
+  geom_node_text(aes(label = name), vjust = 1, hjust = 1)
+
 ```
 
+
+```{r}
+set.seed(2020)
+
+a <- grid::arrow(type = "closed", length = unit(.15, "inches"))
+
+jpeg(
+    filename="figures/directed_bigrams.jpeg",
+    width=10,
+    height=8,
+    units="in",
+    res=1000)
+
+ggraph(bigram_graph, layout = "fr") +
+  geom_edge_link(aes(edge_alpha = n), show.legend = FALSE,
+                 arrow = a, end_cap = circle(.07, 'inches')) +
+  geom_node_point(color = "lightblue", size = 5) +
+  geom_node_text(aes(label = name), vjust = 1, hjust = 1) +
+  theme_void()
+
+dev.off()
+```
+
+
+### LDA
+
+```{r}
+library(tm)
+library(topicmodels)
+
+text_df_td <- df %>% 
+  unnest_tokens(word, description_text_c) %>% 
+  anti_join(stop_words) %>% 
+  anti_join(stopwords(kind = "sv") %>% as_tibble() %>% rename(word = value)) %>% 
+  select(id, word)
+
+text_df_td <- text_df_td %>% 
+  filter(nchar(word) > 3) %>% 
+  count(id, word, sort = T)
+
+df_dtm <- text_df_td %>% 
+  cast_dtm(id, word, n)
+
+df_lda <- LDA(df_dtm, k = 4, control = list(seed = 1234))
+
+df_lda_2 <- LDA(df_dtm, k = 4, control = list(seed = 1234))
+
+df_topics_2 <- tidy(df_lda_2, matrix = "beta")
+
+df_top_terms_2 <- df_topics_2 %>%
+  group_by(topic) %>%
+  top_n(10, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+
+# jpeg(
+#     filename="figures/topic_1_to_4_words.jpeg",
+#     width=8,
+#     height=6,
+#     units="in",
+#     res=1000)
+
+
+df_top_terms_2 %>%
+  mutate(term = str_to_title(term)) %>% 
+  mutate(term = reorder_within(term, beta, topic),
+         topic = paste0("Topic ", topic)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  coord_flip() +
+  scale_fill_brewer(palette = "Paired") +
+  scale_x_reordered() +
+  labs(#title = "Most common words by topic",
+       #subtitle = "Broken into two topics",
+       y = "Term specificity to identified topic",
+       x = "Term in patent text")
+
+# dev.off()
+
+```
+
+
+## What about the kinds of things in the concepts column?
+
+```{r}
+df_concepts <- df %>% 
+  select(id, filing_date, concepts) %>% 
+  unnest(concepts) %>% 
+  mutate(year = str_extract(filing_date, "\\d\\d\\d\\d"),
+         year = parse_number(year),
+         decade = year - year %% 10,
+         counts = parse_number(counts),
+         names = str_to_lower(names)) %>% 
+  group_by(decade, names) %>% 
+  mutate(count_by_decade = sum(counts)) %>% 
+  ungroup()
+```
+
+
+What are the most common concepts per decade?
+
+```{r}
+df_concepts %>%
+  filter(!is.na(decade)) %>% 
+  group_by(decade) %>% 
+  slice_max(count_by_decade, n = 8, with_ties = T) %>% 
+  ungroup() %>% 
+  ggplot(aes(count_by_decade, names, fill = factor(decade))) +
+  geom_col() +
+  facet_wrap(~ factor(decade), scales = "free")
+```
+
+
+What concept is most specific to each decade??
+
+```{r}
+library(tidylo)
+
+concepts_log_odds <- df_concepts %>% 
+  bind_log_odds(decade, names, count_by_decade)
+
+concepts_log_odds %>% 
+  filter(count_by_decade > 5) %>% 
+  arrange(-log_odds_weighted)
+```
+
+
+```{r}
+library(tidytext)
+
+# jpeg(
+#     filename="figures/concepts_by_decade.jpeg",
+#     width=8,
+#     height=6,
+#     units="in",
+#     res=1000)
+
+
+concepts_log_odds %>%
+  filter(!is.na(decade)) %>% 
+  filter(count_by_decade > 8) %>% 
+  mutate(decade = factor(decade)) %>% 
+  group_by(decade) %>%
+  slice_max(log_odds_weighted, n = 10, with_ties = F) %>%
+  ungroup() %>%
+  mutate(names = reorder_within(names, log_odds_weighted, decade)) %>%
+  ggplot(aes(log_odds_weighted, names, fill = decade)) +
+  geom_col(show.legend = FALSE) +
+  scale_y_reordered() +
+  facet_wrap(~decade, scales = "free") +
+  labs(x = NULL,
+       y = NULL,
+       # title = "Words that are most specific to each occupational group"
+       ) 
+
+# dev.off()
+
+```
