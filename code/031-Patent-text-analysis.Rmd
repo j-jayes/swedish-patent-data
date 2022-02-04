@@ -1,0 +1,53 @@
+---
+title: "031-Patent-text-analysis"
+author: "JJayes"
+date: "03/02/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+df <- read_rds("data/patent-info-google/patent_df_cleaned_1.rds")
+
+df <- df %>% 
+  bind_rows(read_rds("data/patent-info-google/patent_df_cleaned_2.rds"))
+```
+
+```{r}
+# df <- read_rds("data/patent-info-google/patent_df_cleaned_2.rds")
+```
+
+
+```{r}
+df <- df %>% 
+  mutate(abstract = str_replace(abstract, "missing", ""))
+
+# df <- df %>% tail(20)
+```
+
+```{r}
+df <- df %>% unnest(description_text) %>% 
+  group_by(id) %>% 
+  mutate(description_text_c = paste0(value, collapse = " ")) %>% 
+  ungroup() %>% 
+  select(!value) %>% 
+  distinct()
+
+df <- df %>% 
+  mutate(description_text_c = str_squish(str_c(abstract, description_text_c))) %>% 
+  select(!abstract)
+```
+
+```{r}
+# library(tidylo)
+
+df
+```
+

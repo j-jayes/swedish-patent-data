@@ -101,7 +101,10 @@ Used Mbart50 to translate on a Google Colab workbook.
 ```{r}
 # read in translations and combine.
 df <- read.csv("data/SCB-occupations/df_translated.csv")
+```
 
+
+```{r}
 df <- df %>% 
   as_tibble() %>% 
   mutate(ssyk_2012_kod = as.character(ssyk_2012_kod),
@@ -118,6 +121,20 @@ df <- df %>%
          english = str_remove(english, "'\\]"),
          english = str_remove(english, '\\["'),
          english = str_remove(english, '"\\]'))
+
+df <- df %>% 
+  mutate(occ_group = str_extract(code, "[0-9]")) %>% 
+  mutate(occ_group_name = str_replace_all(occ_group, 
+                                          c("0" = "Amed forces",
+                                            "1" = "Managers",
+                                            "2" = "Professionals",
+                                            "3" = "Technicians",
+                                            "4" = "Clerks",
+                                            "5" = "Service and sales",
+                                            "6" = "Agric, forest and fisheries",
+                                            "7" = "Craft and related trades",
+                                            "8" = "Machine operators",
+                                            "9" = "Elementary occupations")))
 
 # df %>% write_rds("data/SCB-occupations/df_translated_joined.rds")
 ```
@@ -143,28 +160,26 @@ I want to do UMAP based on TF-IDF in the english descriptions - will colour the 
 
 ```{r}
 df_mod <- df %>% 
-  select(code, english)
-
-df_mod <- df_mod %>% 
-  mutate(group_1 = str_extract(code, "[0-9]"))
+  select(code, english, occ_group_name)
 
 library(recipes)
 library(textrecipes)
 # library(embed)
 
 pca_rec <- recipe(code ~ ., data = df_mod) %>% 
-  update_role(code, group_1, new_role = "id") %>% 
+  update_role(code, occ_group_name, new_role = "id") %>% 
   step_tokenize(english) %>% 
-  # step_stopwords(english) %>% 
-  step_tokenfilter(english, max_tokens = 50) %>% 
+  step_stopwords(english) %>%
+  step_tokenfilter(english, max_tokens = 30) %>% 
   step_tfidf(english) %>% 
-  step_pca(all_numeric_predictors())
+  step_pca(all_numeric_predictors(), keep_original_cols = T)
 
 pca_juiced <- pca_rec %>% prep() %>% juice()
 
 pca_juiced %>% 
-  ggplot(aes(PC1, PC2, colour = group_1)) +
-  geom_point()
+  ggplot(aes(PC1, PC2, colour = occ_group_name)) +
+  geom_point() +
+  labs(colour = "Occupational group")
 ```
 
 What can we say about the different components?
@@ -172,7 +187,7 @@ What can we say about the different components?
 ```{r}
 pca_prep <- prep(pca_rec)
 
-pca_comps <- tidy(pca_prep, 4) %>% 
+pca_comps <- tidy(pca_prep, 5) %>% 
   filter(component %in% paste0("PC", 1:4)) %>% 
   group_by(component) %>% 
   top_n(8, abs(value)) %>% 
@@ -194,17 +209,70 @@ pca_comps %>%
 Do with UMAP
 
 ```{r}
-pca_rec <- recipe(code ~ ., data = df_mod) %>% 
-  update_role(code, group_1, new_role = "id") %>% 
+umap_rec <- recipe(code ~ ., data = df_mod) %>% 
+  update_role(code, occ_group_name, new_role = "id") %>% 
   step_tokenize(english) %>% 
-  step_tokenfilter(english, max_tokens = 50) %>% 
+  step_stopwords(english) %>% 
+  step_tokenfilter(english, max_tokens = 100) %>% 
   step_tfidf(english) %>% 
-  step_pca(all_numeric_predictors())
+  step_umap(all_numeric_predictors())
 
-pca_juiced <- pca_rec %>% prep() %>% juice()
+umap_juiced <- umap_rec %>% prep() %>% juice()
 
-pca_juiced %>% 
-  ggplot(aes(PC1, PC2, colour = group_1)) +
-  geom_point()
+umap_juiced %>% 
+  ggplot(aes(UMAP1, UMAP2, colour = occ_group_name)) +
+  geom_point() +
+  labs(colour = "Occupational group")
 ```
 
+## What is most specific about each occupational class
+
+
+```{r}
+library(tidylo)
+
+tidy_bigrams <- df %>% 
+  unnest_tokens(bigram, english, token = "ngrams", n = 1, to_lower = T) %>% 
+  anti_join(stop_words, by = c("bigram" = "word"))
+
+bigram_counts <- tidy_bigrams %>% 
+  count(occ_group_name, bigram, sort = T)
+
+bigram_log_odds <- bigram_counts %>% 
+  bind_log_odds(occ_group_name, bigram, n)
+
+bigram_log_odds %>% 
+  filter(n > 5) %>% 
+  arrange(-log_odds_weighted)
+```
+
+```{r}
+
+jpeg(filename = "figures/SCB-occupations/log_odds_SCB.jpeg",
+     height = 8,
+     width = 12,
+     units = "in",
+     res = 1000)
+
+bigram_log_odds %>%
+  group_by(occ_group_name) %>%
+  slice_max(log_odds_weighted, n = 10, with_ties = F) %>%
+  ungroup() %>%
+  mutate(bigram = reorder_within(bigram, log_odds_weighted, occ_group_name)) %>%
+  ggplot(aes(log_odds_weighted, bigram, fill = occ_group_name)) +
+  geom_col(show.legend = FALSE) +
+  scale_y_reordered() +
+  facet_wrap(~occ_group_name, scales = "free") +
+  labs(x = NULL,
+       y = NULL,
+       # title = "Words that are most specific to each occupational group"
+       ) 
+
+dev.off()
+```
+
+
+```{r}
+
+
+```
