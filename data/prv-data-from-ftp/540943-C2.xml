@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE simple-patent-document SYSTEM "simple-patent-document-v2-1-1.dtd">
+<simple-patent-document lang="en" country="SE">
+    <bibliographic-data>
+        <publication-reference>
+            <document-id>
+                <country>SE</country>
+                <doc-number>540943</doc-number>
+                <kind>C2</kind>
+                <date>20190102</date>
+            </document-id>
+        </publication-reference>
+        <classifications-ipcr>
+            <classification-ipcr>
+                <ipc-version-indicator>
+                    <date>20060101</date>
+                </ipc-version-indicator>
+                <classification-level>A</classification-level>
+                <section>G</section>
+                <class>07</class>
+                <subclass>C</subclass>
+                <main-group>5</main-group>
+                <subgroup>00</subgroup>
+                <symbol-position>F</symbol-position>
+                <classification-value>I</classification-value>
+                <action-date>
+                    <date>20170511</date>
+                </action-date>
+                <generating-office>
+                    <country>SE</country>
+                </generating-office>
+                <classification-status>B</classification-status>
+                <classification-data-source>H</classification-data-source>
+            </classification-ipcr>
+            <classification-ipcr>
+                <ipc-version-indicator>
+                    <date>20060101</date>
+                </ipc-version-indicator>
+                <classification-level>A</classification-level>
+                <section>G</section>
+                <class>07</class>
+                <subclass>C</subclass>
+                <main-group>5</main-group>
+                <subgroup>08</subgroup>
+                <symbol-position>L</symbol-position>
+                <classification-value>I</classification-value>
+                <action-date>
+                    <date>20170511</date>
+                </action-date>
+                <generating-office>
+                    <country>SE</country>
+                </generating-office>
+                <classification-status>B</classification-status>
+                <classification-data-source>H</classification-data-source>
+            </classification-ipcr>
+        </classifications-ipcr>
+        <application-reference>
+            <document-id>
+                <country>SE</country>
+                <doc-number>1650332</doc-number>
+                <date>20140902</date>
+            </document-id>
+        </application-reference>
+        <priority-claims>
+            <priority-claim sequence="" kind="national">
+                <country>DE</country>
+                <doc-number>102013218511.1</doc-number>
+                <date>20130916</date>
+            </priority-claim>
+        </priority-claims>
+        <parties>
+            <applicants>
+                <applicant sequence="" app-type="applicant" designation="all">
+                    <addressbook>
+                        <orgname>CONTINENTAL AUTOMOTIVE GMBH</orgname>
+                        <address>
+                            <address-1>Vahrenwalder Strasse 9</address-1>
+                            <city>Hannover</city>
+                            <postcode>30165</postcode>
+                            <country>DE</country>
+                        </address>
+                    </addressbook>
+                    <nationality>
+                        <country>DE</country>
+                    </nationality>
+                    <residence>
+                        <country>DE</country>
+                    </residence>
+                </applicant>
+            </applicants>
+            <inventors>
+                <inventor sequence="">
+                    <addressbook>
+                        <last-name>SMOLIN</last-name>
+                        <first-name>Denis</first-name>
+                        <address>
+                            <address-1>Vogt-Mühlstein-Ring 1</address-1>
+                            <city>Villingen-Schwenningen</city>
+                            <postcode>78052</postcode>
+                            <country>DE</country>
+                        </address>
+                    </addressbook>
+                    <nationality>
+                        <country>DE</country>
+                    </nationality>
+                    <residence>
+                        <country>DE</country>
+                    </residence>
+                </inventor>
+                <inventor sequence="">
+                    <addressbook>
+                        <last-name>WERNER</last-name>
+                        <first-name>Thomas</first-name>
+                        <address>
+                            <address-1>Christian-Dunker-Strasse 18</address-1>
+                            <city>Bonndorf</city>
+                            <postcode>79848</postcode>
+                            <country>DE</country>
+                        </address>
+                    </addressbook>
+                    <nationality>
+                        <country>DE</country>
+                    </nationality>
+                    <residence>
+                        <country>DE</country>
+                    </residence>
+                </inventor>
+            </inventors>
+            <agents>
+                <agent sequence="" rep-type="agent">
+                    <addressbook>
+                        <orgname>ZACCO SWEDEN AB</orgname>
+                        <address>
+                            <address-1>Box 5581</address-1>
+                            <city>Stockholm</city>
+                            <postcode>114 85</postcode>
+                            <country>SE</country>
+                        </address>
+                    </addressbook>
+                </agent>
+            </agents>
+        </parties>
+        <invention-title lang="en">Digital tachograph</invention-title>
+        <pct-or-regional-filing-data>
+            <document-id>
+                <country>WO</country>
+                <doc-number>PCT/EP2014/068556    </doc-number>
+                <date>20140902</date>
+            </document-id>
+        </pct-or-regional-filing-data>
+    </bibliographic-data>
+</simple-patent-document>

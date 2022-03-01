@@ -1,0 +1,15 @@
+knitr
+hrbrthemes
+fontawesome
+xaringan
+xaringanExtra
+tidyverse
+ggplot2
+tibble
+tidyr
+readr
+purrr
+dplyr
+stringr
+forcats
+xaringanthemer

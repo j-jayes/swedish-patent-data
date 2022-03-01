@@ -116,6 +116,18 @@ df_1_words %>%
 dev.off()
 ```
 
+```{r}
+df_1 %>% 
+  filter(!is.na(applicant)) %>% 
+  mutate(applicant = str_to_title(applicant)) %>% 
+  count(applicant, sort = T) %>% 
+  head(10) %>% 
+  gt() %>% 
+  cols_label(applicant = md("**PRV Patent applicants**"),
+             n = md("**Number of applications**, 1880-2021")) 
+```
+
+
 
 ### More from google patents with the scraped data
 
@@ -159,11 +171,11 @@ df_countries %>%
   shave() %>%
   rplot(shape = 15, colours = c("midnightblue", "white", "darkorange"))
 
-df %>%
-  select(starts_with("ing_1")) %>%
-  rename_with(.cols = everything(), ~ str_remove(.x, "ing_1_")) %>% 
-  correlate() %>% 
-  network_plot()
+# df %>%
+#   select(starts_with("ing_1")) %>%
+#   rename_with(.cols = everything(), ~ str_remove(.x, "ing_1_")) %>% 
+#   correlate() %>% 
+#   network_plot()
 ```
 
 Maybe filter it more
@@ -201,8 +213,8 @@ library(corrr)
 
 jpeg(
     filename="figures/patent_country_corrs_top_12.jpeg",
-    width=8,
-    height=6,
+    width=6,
+    height=4,
     units="in",
     res=1000)
 

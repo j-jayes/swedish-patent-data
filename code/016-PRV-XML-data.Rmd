@@ -1,0 +1,98 @@
+---
+title: "016-PRV-XML-data"
+author: "JJayes"
+date: "24/02/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(tidyverse)
+library(here)
+library(xml2)
+```
+
+
+```{r}
+file <- here("data/prv-data-from-ftp/SE0702099A1.xml")
+
+xml <- read_xml(file)
+
+xml %>% xml_text()
+
+xml %>%
+  xml_child("abstract") %>%
+  xml_text() %>%
+  str_squish()
+
+xml %>%
+  xml_child("description") %>%
+  xml_text() %>%
+  str_squish()
+
+xml %>%
+  xml_child("claims") %>%
+  xml_text() %>%
+  str_squish()
+```
+
+```{r}
+xml %>%
+  xml_child("drawings")
+```
+
+
+
+Looking at biblio data
+
+```{r}
+xlm <- read_xml(here("data/prv-data-from-ftp/540943-C2.xml"))
+
+xlm %>% 
+  xml_child("bibliographic-data") %>% 
+  xml_child("publication-reference")
+```
+
+
+
+## Planning
+
+Need to make a function that gets the code from the patent, then takes the description, then saves it in some useful format.
+
+```{r}
+file <- here("data/prv-data-from-ftp/SE0702099A1.xml")
+
+xml <- read_xml(file)
+
+xml %>% xml_text()
+
+xml %>% xml_structure()
+
+
+xml %>%
+  xml_child("abstract") %>%
+  xml_text() %>%
+  str_squish()
+
+xml %>%
+  xml_child("description") %>%
+  xml_text() %>%
+  str_squish()
+
+xml %>%
+  xml_child("claims") %>%
+  xml_text() %>%
+  str_squish()
+```
+
+
+
+
+
+
+
+

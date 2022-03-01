@@ -1,0 +1,76 @@
+---
+title: "slide_figure_design"
+author: "JJayes"
+date: "01/03/2022"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+```
+
+# Make a network plot that is interative in the slides of the lierature that is related
+
+```{r}
+library(readxl)
+
+df <- read_excel("literature/Frey_Osbourne_network_table.xlsx") %>% 
+  janitor::clean_names()
+```
+
+```{r}
+library(networkD3)
+
+
+# Load data
+data(MisLinks)
+data(MisNodes)
+
+MisLinks %>% as_tibble()
+MisNodes %>% as_tibble()
+
+# Plot
+forceNetwork(Links = MisLinks, Nodes = MisNodes,
+            Source = "source", Target = "target",
+            Value = "value", NodeID = "name",
+            Group = "group", opacity = 0.8)
+```
+
+
+
+What about using ggiraph?
+
+
+```{r}
+library(ggiraph)
+
+g1 <- df %>% 
+  bind_cols(rnorm(41, 5, 2) %>% as_tibble() %>% rename(x = value),
+            rnorm(41, 5, 2) %>% as_tibble() %>% rename(y = value)) %>% 
+  mutate(label = paste0(authors, " - (", year, ")", "\n", title),
+         shp = if_else(authors == "C. Frey, Michael A. Osborne", "A", "B")) %>% 
+  ggplot(aes(x, y, size = citations)) +
+  geom_point(aes(shape = shp),show.legend = F) +
+  geom_point_interactive(aes(colour = year,
+                             tooltip = label)) +
+  scale_color_viridis_c() +
+  scale_size_continuous(trans = "log2") +
+  scale_shape_manual(values = c(16, 17)) +
+  labs(x = NULL,
+       y = NULL) +
+  theme_void() +
+  labs(colour = "Year of publication",
+       size = "Number of citations",
+       title = "Papers related to Frey and Osbourne (2007)")
+
+ggiraph(ggobj = g1)
+```
+
+
+What about r2d3?
+
+```{r}
+library(r2d3)
+r2d3(data = jsonlite::read_json("miserables.json"), d3_version = 4, script = "forcegraph.js")
+```
+

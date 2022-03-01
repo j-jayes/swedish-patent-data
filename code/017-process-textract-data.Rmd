@@ -1,0 +1,93 @@
+---
+title: "process textract data"
+author: "JJayes"
+date: "01/03/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+require(data.table)
+
+
+#Get a list with all csv files from the directory that is set as 'working directory'
+filelist = list.files(path = "./data/textract/",
+                      pattern="*.csv$") %>% 
+  as_tibble() %>% 
+  rename(filename = value) %>% 
+  mutate(path = str_c("data/textract/", filename))
+
+df <- filelist %>% 
+  mutate(data= map(path, ~ fread(., encoding = "UTF-8")))
+
+df <- df %>% 
+  unnest(data)
+
+```
+
+This gets me to one sentence per line
+
+```{r}
+df <- df %>% 
+  mutate(Text = str_remove_all(Text, "\\[|\\]")) %>% 
+  separate_rows(Text, sep = "'") %>% 
+  mutate(Text = str_remove_all(Text, "[:punct:]"),
+         Text = str_squish(Text)) %>% 
+  filter(nchar(Text) > 1)
+
+df <- df %>%
+  select(-path) %>%
+  mutate(filename = str_remove(filename, "\\.csv")) %>%
+  rename(patent = filename) %>%
+  janitor::clean_names()
+```
+
+
+at page 11 of results
+
+Following: [this tutorial](https://www.youtube.com/watch?v=7z7U7ORFWQM)
+
+```{r}
+library(quanteda)
+
+corp = corpus(df, docnames = "filename", text_field = "Text")
+
+dtm = dfm(corp, stem = T, remove = stopwords("sv"), remove_punct = T)
+
+dtm <- dfm_trim(dtm, min_termfreq = 10)
+dtm
+```
+
+```{r}
+library(tidytext)
+
+df %>% 
+  unnest_tokens(word, Text) %>%
+  anti_join(stopwords("sv") %>% as_tibble() %>% rename(word = value)) %>% 
+  filter(nchar(word) > 3,
+         str_detect(word, "[a-z]")) %>% 
+  count(word, sort =T) %>% view
+```
+
+
+
+
+Working with quanteda
+
+```{r}
+library(readtext)
+
+df <- readtext(file = "data/textract/patents_combined.csv", 
+               text_field = "text",
+               docid_field = "patent")
+
+df <- corpus(df, docnames = "patent")
+```
+

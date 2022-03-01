@@ -24,6 +24,25 @@ df <- df %>%
 # df <- read_rds("data/patent-info-google/patent_df_cleaned_2.rds")
 ```
 
+## Table of patent data
+
+```{r}
+df %>%
+  select(id, tables) %>%
+  unnest(tables) %>%
+  unnest(contents) %>%
+  filter(!is.na(value), key != "priority_date",
+         table == 5)
+
+df %>% 
+  filter(id == "SE-414337-B") %>% 
+  # pull(title) %>% 
+  unnest(claims_text) %>% 
+  head(1) %>% 
+  pull(value)
+```
+
+
 
 ```{r}
 df <- df %>% 
@@ -57,6 +76,7 @@ df <- df %>%
 
 ```{r}
 df <- read_rds("data/patent-info-google/patent_text_data.rds")
+
 
 eng_stopwords <- stop_words %>% filter(lexicon == "snowball")
 swe_stopwords <- stopwords(language = "sv") %>% as_tibble() %>% rename(word = value)
@@ -258,3 +278,21 @@ concepts_log_odds %>%
 # dev.off()
 
 ```
+
+## Table for patents
+
+```{r}
+df %>% 
+  filter(filing_date != "missing") %>% 
+  tail() %>% 
+  mutate(description_text_c = str_remove_all(description_text_c, "[0-9]"),
+         description_text_c = str_sub(description_text_c, 1, 100)) %>% 
+  gt(caption = "Example of patent descriptions") %>% 
+  cols_label(id = "Patent #",
+             description_text_c = "Description",
+             filing_date = "Filing date")
+```
+
+
+
+

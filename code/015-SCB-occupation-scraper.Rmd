@@ -20,11 +20,14 @@ df <- df %>%
          ssyk_2012_kod  = ifelse(nchar(ssyk_2012_kod) == 3, str_c("0", ssyk_2012_kod ), ssyk_2012_kod ))
 ```
 
-How many specific occupations?
+How many specific occupational codes?
 
 ```{r}
 codes <- df %>% 
   distinct(ssyk_2012_kod)
+
+df %>% 
+  filter(ssyk_2012_kod == "7319")
 ```
 
 430
@@ -32,6 +35,36 @@ codes <- df %>%
 ```{r}
 codes <- codes %>% 
   mutate(url = str_c("https://www.h5.scb.se/yreg/SSYKBeskr2012.asp?id=", ssyk_2012_kod))
+```
+
+How many titles per occupational code?
+
+```{r}
+df %>% 
+  count(ssyk_2012_kod, sort = T) 
+
+df %>% 
+  filter(ssyk_2012_kod == "2415")
+```
+
+```{r}
+library(gt)
+
+occs_2415 <- c(
+  "Chief Economist", "Econometrician",
+  "Researcher, economics", "Health economist",
+  "Macroanalyst", "Environmental economist", "Economist",
+  "External analysts", "Interest rate analysts",
+  "Social economist"
+) %>% as_tibble()
+
+df %>% 
+  filter(ssyk_2012_kod == "2415") %>% 
+  bind_cols(occs_2415) %>% 
+  gt() %>% 
+  cols_label(ssyk_2012_kod = "Occupational code",
+             yrkesbenamning = "Occupational title",
+             value = "Occupational title (en)")
 ```
 
 
@@ -164,7 +197,7 @@ df_mod <- df %>%
 
 library(recipes)
 library(textrecipes)
-# library(embed)
+library(embed)
 
 pca_rec <- recipe(code ~ ., data = df_mod) %>% 
   update_role(code, occ_group_name, new_role = "id") %>% 
@@ -220,8 +253,8 @@ umap_rec <- recipe(code ~ ., data = df_mod) %>%
 umap_juiced <- umap_rec %>% prep() %>% juice()
 
 jpeg(filename = "figures/SCB-occupations/UMAP_SCB.jpeg",
-     height = 8,
-     width = 12,
+     height = 4,
+     width = 6,
      units = "in",
      res = 1000)
 
@@ -281,6 +314,34 @@ bigram_log_odds %>%
 
 dev.off()
 ```
+
+```{r}
+jpeg(filename = "figures/SCB-occupations/log_odds_SCB_managers_professionals.jpeg",
+     height = 4,
+     width = 8,
+     units = "in",
+     res = 1000)
+
+bigram_log_odds %>%
+  mutate(bigram = str_to_title(bigram)) %>% 
+  filter(occ_group_name %in% c("Managers", "Professionals")) %>% 
+  group_by(occ_group_name) %>%
+  slice_max(log_odds_weighted, n = 10, with_ties = F) %>%
+  ungroup() %>%
+  mutate(bigram = reorder_within(bigram, log_odds_weighted, occ_group_name)) %>%
+  ggplot(aes(log_odds_weighted, bigram, fill = occ_group_name)) +
+  geom_col(show.legend = FALSE) +
+  scale_y_reordered() +
+  scale_fill_manual(values = c("#00B0F6", "#9490FF")) +
+  facet_wrap(~occ_group_name, scales = "free") +
+  labs(x = NULL,
+       y = NULL,
+       # title = "Words that are most specific to each occupational group"
+       ) 
+
+dev.off()
+```
+
 
 ### Table for desc stats
 

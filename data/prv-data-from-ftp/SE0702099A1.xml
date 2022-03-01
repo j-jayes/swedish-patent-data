@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ep-ocr-patent-document PUBLIC "-//EPO//ep-ocr-patent-document-v1-0//EN" "ep-ocr-patent-document-v1-0.dtd">
+
+<!-- EPO <DP n="1"> -->
+<!-- EPO <DP n="22"> --><ep-ocr-patent-document kind="A1" country="SE" id="SE0702099A1" lang="SV">
+<abstract lang="sv">
+<p id="pa01" num="0001">Ett system och metod för reglering av fukt i ett instängt utrymme innehållandes; en yttre fuktsensor; en yttre temperatursensor; en inre fuktsensor; en inre temperatur sensor; ett ventilationssystem; en beräkningsenhet som tar emot sensorinformation från temperatur- och fuktsensorer, jämför sensorinformation från insidan och utsidan av det instängda utrymmet och använder jämförelsen av sensorinformation för att alstra en eller flera utgående signaler för att kontrollera ventilationssystemet. Detta säkerställer att tilluftsventilation (av utomhusluft) är aktiverat enbart när det är fördelaktigt för torkningen av vinden samt styrning av ventilationen så att en acceptabel fuktnivå säkerställs med en minimal ventilationsgrad vilket resulterar i en varmare vind och reducerad värmeförlust under uppvärmningssäsongen.</p></abstract>
+<!-- EPO <DP n="2"> -->
+<description lang="sv">
+<heading>
+
+<u>Bakgrundsbeskrivning</u></heading>
+<p id="p0001" num="0001">Denna uppfinning relaterar generellt till helt eller delvis slutna utrymmen i bostäder och liknande byggnader. För att kunna utforma fuktsäkra utrymmen är det kritiskt att eliminera eller minimera fuktkällor. De främsta fuktkällorna att kontrollera vad gäller tak och vindskonstruktioner är; nederbörd, byggfukt (fukt som initialt är lagrat i byggnadsmaterialet och så småningom torkar ut) och inomhus- och utomhusluftfuktighet. Det är självklart att regn som faller på taket och töande snö och is aldrig ska tränga in i vindsutrymmet. Byggnadsfukt måste elimineras under byggnadstiden eller av adekvat ventilation under torkningsperioden. Inomhusluft bör förhindras från att tränga upp på vinden. Ett perfekt lufttätt takbjälklag eliminerar detta luftflöde men det kan även förhindras av ett övertryck i vindsutrymmet, ett undertryck i utrymmet nedanför eller genom en kombination av dessa två.</p>
+<p id="p0002" num="0002">Även utomhusluft som når vinden bär med sig fukt (ånga). Denna luft har möjligheten att torka ut fukt om fuktigheten är högre i vindsutrymmet än i utomhusluften. Omvänt kan den släppa ifrån sig fukt då fuktigheten är lägre i vindsutrymmet. Fukt kan tas upp hygroskopiskt i byggnadsmaterial och/eller kondensera på materialytorna på vinden. Detta sker typiskt då vinden är kallare än den omgivande luften. Fysikaliskt kan detta förklaras exempelvis genom långvågig utstrålning från taket till natthimlen och minimerat värmeflöde genom vindsbjälklaget i termiskt välisolerade byggnader. Ökad ventilation har traditionellt alltid setts som fördelaktigt. En av de första omfattande fältstudierna om kallvindar (Samuelsson, 1995, Fuktbalans i kalla vindsutrymmen. Betydelse av ventilation och val av isoleringsmaterial, SP-rapport 1995:68, SP Sveriges Tekniska Forskningsinstitut) undersökte ventilationsgraden och fuktlagringskapaciteten hos isoleringsmaterial på kallvindar. Studien visade att ju mer vinden ventileras, desto högre relativ luftfuktighet nås. Denna slutsats är enbart giltig under förutsättningen att det inte finns någon fuktbelastning från inomhusmiljön.</p>
+<p id="p0003" num="0003">Fuktrelaterade problem uppstår ofta då isoleringen till inomhusmiljön ökas vilket resulterar i ett kallare vindsutrymme. Andra exempel är förändrade uppvärmningsmetoder av byggnaden. Fast det är över 30 år sedan fuktrelaterade problem på vindar blev ett vanligt förekommande problem förekommer det fortfarande mögeltillväxt på invändiga träväggar.</p>
+
+<!-- EPO <DP n="3"> -->
+<p id="p0004" num="0004">Traditionell ventilation av kallvindar ifrågasätts idag i en pågående diskussion i USA. Ventilation av kallvindar kan vara fördelaktig under vissa förutsättningar, men bör inte ses som huvudstrategin för att eliminera fuktproblem på kallvindar och i andra utrymmen. Uppgivna fördelar med kallvindsventilation innefattar reduktion av fuktproblem, minimering av isbildning, säkerställande av livslängd hos byggnadsmaterial samt reduktion av kylbehov. De flesta byggstandarder kräver kallvindsventilation för att minimera kondensering på undersidan av undertaket. Kallvindsventilation är starkt etablerat som ett viktigt element i byggnaders takkonstruktioner och brist på ventilation ses rutinmässigt som orsaken till många typer av problem (TenWolde, Rose, 1999, <i>Issues related to venting of attics and cathedral ceilings, ASHRAE Transactions 1999, V. 105</i> och Rose, TenWolde 2002, <i>Issues related to</i></p>
+<heading>
+
+<i>venting of attics and cathedral ceilings, ASHRAE Journal October 2002).</i></heading>
+<p id="p0005" num="0005">I riktlinjer från American Society of Heating, Refigerating and Air-Conditioning Engineering (ASHRAE) (TenWolde, Rose, 1999, Issues related to venting of attics and cathedral ceilings, ASHRAE Transactions 1999, V. 105 and Rose, TenWolde, 2002, Issues related to venting of attics and cathedral ceilings, ASHRAE Journal October 2002,) anges att: • Kontroll av fukten i inomhusluften bör vara den främsta åtgärden för att begränsa fuktansamling på kallvindar i kalla och blandade klimat. De rekommenderar ventilation av kallvindar som en extra säkerhetsåtgärd, men anser att det ej att det bör vara ett krav. • För att minimera risken för isfläckar på vinden bör värmekällor och inläckage av varmluft från bostadsutrymmet nedanför undvikas. Behovet av ventilation för att undvika isbildning beror på klimatet och isoleringsgraden i. Ventilation är dock nödvändigt i snörika klimat för att undvika isbildning vid takfoten oberoende av isoleringsgrad. • Ventilation av kallvindar i kalla och blandade klimat rekommenderas. Om man har starka skäl att undvika vindsventiler, kan oventilerade tak fungera bra i kalla och blandade klimat om åtgärder görs för att kontrollera fuktigheten inomhus, minimera värmekällor på vinden och minimera luftläckaget upp till kallvinden. Ventilation är dock nödvändigt i snörika klimat för att undvika isbildning. <!-- EPO <DP n="4"> -->
+• Ventilation bör ses som ett konstruktionsalternativ i kalla och våta kustklimat och i varma klimat. Dagens kunskaper stödjer inte ett allmänt krav på ventilation av kallvindar i dessa klimat.</p>
+<p id="p0006" num="0006">TenWolde och Rose förklarar att vindsventiler ibland kan vara opraktiskt och oönskat. Takventiler kan även ha en roll vid bränder i bostadsområden då de tillåter gnistor att ta sig in i vindsutrymmet och då påskynda spridningen av branden genom luftdraget i ventilationsutrymmet.</p>
+<p id="p0007" num="0007">Amerikanska riktlinjer, bland annat från H.U.D. (Department of Housing and Urban Development), kräver isolering av kallvindar i de flesta fall för alla klimat. Det främsta syftet med detta är att förebygga kondensering på undersidan av yttertaket. Kylning av kallvinden under sommaren och en möjlig förlängning av den tekniska livslängden hos bitumenbaserade taktäckningsmaterial är nämnda som ytterligare fördelar. Ett ytterligare problem är att insekter lättare kan komma in i ventilerade vindar.</p>
+<p id="p0008" num="0008">I ASHRAEs (American Society of Heating, Refigerating and Air-Conditioning Engineering) <i>1997 Fundamentals Handbook,</i> nämns flera nackdelar med kallvindsventilation. Exempel är att kall luft som ventileras in i kallvindar under vintersäsongen kan försämra vindsisoleringens prestanda. I varma och fuktiga klimat tenderar även ventilationen att öka fuktigheten på vinden.</p>
+<p id="p0009" num="0009">ASHRAE menar att för- och nackdelar med kallvindsventilation behöver utvärderas från fall till fall. I klimat där uppvärmning sker (kalla klimat) överväger generellt fördelarna och ventilation bör därför användas. I klimat där kylning sker (varma och fuktiga klimat) är det dock inte uppenbart att fördelarna överväger och ventilation skall inte vara ett krav, men en konstruktionsmöj lighet.</p>
+<p id="p0010" num="0010">I Storbritannien har problem med fukt på kall vindar uppmärksammats. Hög relativ luftfuktighet på vinden gör att virke eller andra hygroskopiska material tar upp vattenånga tills dess fukthalt blir så pass hög att röta kan börja växa. Kylning av taktäckningen genom nattutstrålning kyler ner yttertaket till under daggpunkten så att kondens sker. <!-- EPO <DP n="5"> -->
+Byggnadsregler i Storbritannien kräver att varken prestanda hos byggnadskonstruktionen eller hälsan hos de boende påverkas negativt av kondens i eller på ytan av byggnadsmaterialen. Kraven är implementerade genom referens till relevanta delar av BS5250:2002 (British Standard Code of Practice for the Control of Condensation in Buildings) som i sin tur refererar till beräkningsmetoden BS EN ISO 13788:2001. Byggnader med luftströmmar genom sprickor och hålrum är dock exkluderade. Då luftströmmar dominerar rörelsen av fukt i ventilerade kallvindar är skattningen av risk för kondensering genom denna metod icke giltig.</p>
+<p id="p0011" num="0011">Enligt uttalanden i svensk press är fuktig inomhusluft är den näst främsta orsaken till fukt på kallvindar (regn är den främsta). Eftersom svenska hus är särskilt tätt byggda på grund av det kalla vinterklimatet och strävan att spara energi, är vindarna normalt kalla och den fukt som tar sig in kommer sannolikt att kondensera. Detta kan på sikt leda till problem som röta, mögel och dylikt. Kondensatet kan också frysa och ackumuleras. Det har hänt att innertak kollapsat av denna vikt.</p>
+<p id="p0012" num="0012">Samuelsson (refererad ovan) testade två nya konstruktionslösningar för att kontrollera kallvindsfukt och fann att båda hade en viss effekt. Den första lösningen bestod ett tunt lager cellplastisolering applicerat under yttertaket. Hos den andra lösningen användes liknande isolering på taket och dessutom eliminerades vindsventilationen. Samuelsson varnar dock för att brist på ventilation kan innebära risker.</p>
+<p id="p0013" num="0013">Svenska riktlinjer (väldigt ofta funktionsbaserade) rekommenderar inte mer än vad detta exempel från Boverkets Byggregler (BBR, 2002, stycke 6:5332) visar: " Vindsutrymmen, tak-och bjälklagskonstruktioner samt installationer inom sådana utrymmen och konstruktioner skall utformas så att uppkomst av skadlig fukt förhindras."</p>
+<p id="p0014" num="0014">Praxis idag fokuserar på tillräcklig ventilationsgrad och försäkran om lufttäta vindsbjälklag inklusive åtgärder så som att använda lufttäta ångspärrar och tätning av genomföringar för installationer.</p>
+<p id="p0015" num="0015">Dagens tillgängliga tekniska lösningar är baserade på naturlig ventilation med fasta ventilationsöppningar vid nock och/eller vid takfot. Trenden går mot minskade ventilationsöppningar. Detta reducerar fuktkällan från utomhusluften. Det är dock ödesdigert <!-- EPO <DP n="6"> -->
+om byggfukt finns eller om takbjälklaget inte är tillräckligt lufttätt. Om någon av dessa fuktkällor föreligger finns inte tillräcklig ventilation för att för att föra ut fukten. Detta resulterar i en konstant hög fuktighet i vindskonstruktionen.</p>
+<p id="p0016" num="0016">En vanlig tilluftsventilation med fläkt till vinden skapar både ett konstant luftflöde in i vindsutrymmet och ett övertryck i relation till utrymmet nedanför. Detta kan dock öka fuktkällan från utomhusluften.</p>
+<p id="p0017" num="0017">Frånluftventilation i utrymmet under kallvinden kan eliminera luftläckage av inomhusluft. Detta reducerar dock inte fuktkällan från utomhusluften.</p>
+<p id="p0018" num="0018">Hos andra typer av tillgängliga teknologier, är metoderna baserade på att förhöja torkeffekten i vindsutrymmet antingen genom att använda diffusionsöppna membran eller genom mekaniska avfuktare istället för att eliminera eller reducera fuktkällorna. Teknologin med diffusionsöppna membran är egentligen endast användbar vid nybyggnationer och det kan ifrågasättas hur väl det fungerar i fall med byggfukt och/eller byggnader som inte är lufttäta. Mekaniska avfuktare i kombination med tätning av ventilationsöppningar kan fungera men det är en dyr lösning. På grund av låga temperaturer (under noll grader) fungerar bara sorptionsavfuktare på kallvindar under vintersäsongen. Även ett kontinuerligt underhåll behövs.</p>
+<p id="p0019" num="0019">Andra exempel på hur ventilation av slutna utrymmen regleras finns beskrivet i U.S Patent No. 5,881,951 och 6,145,759. Dessa lösningar reglerar fukt i underliggande slutna utrymmen så som krypgrunder i bostäder. Likheten med föreliggande uppfinning består i principen att ventilera baserat på fuktigheten inomhus och utomhus. Krypgrunden i dessa patent är dock ventilerad med en frånluftsfläkt medan uppfinningen beskriven häri skapar ett övertryck genom en aktiv tillförsel av luft från utsidan.</p>
+<p id="p0020" num="0020">Andra relaterade lösningar är rena torkprocesser för våta byggnader så som beskrivet i U.S</p>
+<p id="p0021" num="0021">Patent No. 6,161,736. Denna uppfinning skapar en luftcirkulation i en våt (det vill säga översvämmad) byggnad baserat på den absoluta fuktigheten vid den våta positionen samt den omgivande fuktigheten och temperaturen. Lösningen fokuserar på våta eller vattenskadade delar av byggnader och inte på fuktigheten i ett utrymme. Vidare tar denna lösning inte hänsyn till lufttrycket i ett instängt utrymme.</p>
+
+<!-- EPO <DP n="7"> -->
+<p id="p0022" num="0022">Ett mål för uppfinningen är därför att skapa ett system och en metod för att kontrollera</p>
+<p id="p0023" num="0023">ventilation och luftflöde i slutna utrymmen för att reglera fuktighet. För en given vind, oavsett om bjälklaget är tätt eller om det finns byggfukt, är en anpassad intelligent ventilationsstrategi avgörande för fuktsäkerheten. Detta löses med den här beskrivna uppfinningen. Uppfinningen baseras på ett koncept med styrd ventilation. Effekten av uppfinningen beror på tätheten hos</p>
+<p id="p0024" num="0024">vindskonstruktionen. Det vill säga, ju tätare vinden är mot utomhusluften desto större effekt har uppfinningen. Detta innebär att alla ventilationsöppningar vid takfot och nock tätas så bra det går i befintliga hus. Uppfinningen säkerställer att tilluftsventilation (med utomhusluft) aktiveras endast då det är gynnsamt med avseende på uttorkning av vinden.</p>
+<p id="p0025" num="0025">Tätningen av vinden reducerar luftflödet upp genom vindsbjälklaget när ventilationen är avstängd och övertrycket eliminerar det helt och hållet när ventilationen är på. Under perioder då byggfukt torkas ut säkerställer ventilationsstyrenheten att ventilationen aktiveras endast när det är gynnsamt med avseende på fukt- och temperaturöfrhållanden utomhus. Efter uttorkningsperioden minskas ventilationsgraden av vinden automatiskt.</p>
+<p id="p0026" num="0026">Uppfinningen styr ventilationen så att en acceptabel fuktnivå säkerställs med en minimal ventilationsgrad, vilket leder till en varmare vind och en reducerad värmeförlust under uppvärmningssäsongen.</p>
+<p id="p0027" num="0027">I varma och fuktiga klimat finns ett kylbehov, det vill säga en reduktion av värmetillskottet till bostaden. Detta kan uppnås genom en ökad ventilation av vinden. Med hjälp av uppfinningen kan ventilationen styras och slås på under perioder när utomhusluften är torrare än vindsluften och därmed inte riskera fuktsäkerheten hos vinden.</p>
+<heading>
+
+<u>Sammanfattning av uppfinningen</u></heading>
+<p id="p0028" num="0028">Uppfinningen är baserad på ett koncept för kontrollerad ventilation. Effekten av uppfinningen är relaterad till täthetsgraden på kallvinden, det vill säga ju tätare vinden är mot utomhusluften desto bättre effekt har uppfinningen. Detta innebär att alla ventilationsöppningar vid nock och takfot tätas så väl som möjligt för befintliga byggnader. Innovationen säkerställer att tilluftsventilation (med utomhusluft) är aktiverat enbart när det är fördelaktigt för torkning av vinden. Innovationen styr ventilationen så att en acceptabel <!-- EPO <DP n="8"> -->
+fuktighet nås med en minimal ventilationsgrad vilket resulterar i en varmare kallvind och reducerad värmeförlust under uppvärmningssäsongen.</p>
+<p id="p0029" num="0029">Innovationen gör det möjligt att öka vindsisoleringen och därmed minska värmeförlusterna utan att reducera säkerheten mot fuktproblem i vindskonstruktionen. Innovationen är mest effektiv då vinden är lufttät. Vidare fördelar är reducerade kostnader eftersom det inte är nödvändigt att installera ventiler, minskad risk för brand (att gnistor tar sig in i vindsutrymmet genom ventiler vid till exempel skogsbränder) samt en effektiv utestängning av insekter.</p>
+<p id="p0030" num="0030">Uppfinningen kan användas också till andra slutna utrymmen såsom hus som endast används sporadiskt, källare, båtar, husvagnar, fraktcontainers och liknande där fukt kan vara ett problem. Uppfinningen minskar fuktigheten i utrymmet och medger därmed mindre uppvärmning och lägre energikostnader.</p>
+<p id="p0031" num="0031">Andra syften och fördelar med uppfinningen visas även genom följande beskrivning och bifogade krav.</p>
+<heading>
+
+<u>Kort beskrivning av ritningarna</u></heading>
+<heading>
+
+Figur 1 är en schematisk ritning som visar den generella principen för innovationen.</heading>
+<p id="p0032" num="0032">Figur 2 är en schematisk riktning som visar den generella principen för den tekniska lösningen av uppfinningen. Figur 3 visar den principiella utformningen av uppfinningen på en kallvind i en byggnad. Figur 4 visar den principiella utformningen av uppfinningen på en kallvind i en byggnad då ångtrycket mäts på flera ställen. Figur 5 visar ett exempel på ångtryck uppmätt under en 1 O-dagars period vid användning av uppfinningen. Figur 6 visar en jämförelse i ånghalt (g/m<sup>3</sup>) mellan insidan (vinden) och utomhusluft för självdragsventilation och för kontrollerad ventilation styrd av uppfinningen. <!-- EPO <DP n="9"> -->
+Figur 7 visar varvtalet för en varvtalsstyrd tilluftsfläkt vid användning i uppfinningen.</p>
+<heading>
+
+<u>Beskrivning av föredragna utföringsformer</u></heading>
+<p id="p0033" num="0033">Kortfattat är uppfinningen häri baserad på ett koncept för kontrollerad ventilation där effekten av uppfinningen är relaterad till lufttätheten i kallvinden (eller andra instängda utrymmen) så att ju bättre lufttäthet gentemot exteriören desto bättre är effekten av uppfinningen. Detta innebär att, för en befintlig byggnad, tätas öppningar vid nock och takfot så väl som möjligt. Uppfinningen ser till att tilluftsventilation (av utomhusluft) enbart aktiveras när det är fördelaktigt för torkningen av kallvinden. Uppfinningen kontrollerar ventilation så att en acceptabel fuktighet nås med en minimal ventilationsgrad vilket resulterar i en varmare kallvind och reducerad värmeförlust under uppvärmningssäsongen.</p>
+<p id="p0034" num="0034">I uppfinningen beskriven häri, med referens till Figur 1, kommunicerar luft utanför (1) ett helt eller delvis slutet utrymme med luft på insidan (2). När ångtrycket i luften utanför (1) är lägre än i luften på insidan (2) ventileras luft från utsidan in i utrymmet (3). När ångtrycket i den invändiga luften (2) är lägre än i luften utanför (1) förekommer inte någon ventilation (3) in i utrymmet. Luft från insidan (2) kan släppas ut till utsidan (1) genom en ventilationsöppning (4) när ventilationen (3) är aktiv. Reglering av ventilationen (3,4) görs mekaniskt eller av ett centralt datorsystem (5).</p>
+<p id="p0035" num="0035">I Figur 2 visas en teknisk lösning av uppfinningen där en utvändig fuktgivare (6) kombinerat med en utvändig temperaturgivare (7) anpassad till utomhusklimat, en eller flera invändiga fuktgivare (8) kombinerat med en eller flera invändiga temperaturgivare (9) förser en beräkningsenhet (10) med indata. En algoritm (11) behandlar givarinformationen och andra relevanta parametrar för att generera en eller flera utsignaler som styr ett eller flera reläer och/eller varvtalsregulatorer (12), som i sin tur styr (14) en eller flera elektriska komponenter. Systemet drivs av elektricitet (15) antingen från nätanslutning eller från batteri. Indata från givarna (6-9) och utdata (14) kan antingen överföras trådlöst eller via kablar till beräkningsenheten (10). Systemet kan övervakas och/eller regleras via kablar eller trådlösa kommunikationsenheter (13).</p>
+
+<!-- EPO <DP n="10"> -->
+<p id="p0036" num="0036">I Figur 3 visas en principiell utformning av uppfinningen på en kallvind i en byggnad där ett helt eller delvis slutet utrymme (16) bildar en insida och utsida. Givare (17) placerade på utanför utrymmet mäter den externa luftfuktigheten och temperaturen och sensorer placerade inuti utrymmet (18) mäter den interna luftfuktigheten och temperaturen. Sensorerna kan vara kopplade till en beräkningsenhet (19) antingen via kablar eller trådlöst. En ventilationsenhet (20) som kan vara en fläkt, spjäll eller något annan typ av ventilationssystem tar emot utgångsdata från beräkningsenheten (19) antingen via kablar eller trådlöst. En ventilationsöppning (21) är monterad på något ställe i det instängda utrymmet för att släppa ut luft när positivt lufttryck skapas av tilluft från ventilationsenheten (20).</p>
+<p id="p0037" num="0037">När ångtrycket mäts på flera platser i volymen är givare (18) placerade på två eller flera platser på insidan av den helt eller delvis slutna kallvinden (16) (Figur 4). Givare är placerade på utsidan av kallvinden (17) i anslutning till ventilationsenheten (20) eller på andra platser utanför utrymmet.</p>
+<p id="p0038" num="0038">Uppmätta ångtryck vid användning av uppfinningen under en 1 O-dagars period visas i Figur 5. Tilluftsfläkten är aktiverad när ångtrycket i vindsluften är högre än ångtrycket i utomhusluften. På motsvarande sätt är fläkten stoppad och ventilationen avstängd när ångtrycket är lägre på insidan än på utsidan. Figur 6 visar en jämförelse i ånghalt (g/m<sup>3</sup>) mellan insidan (vinden) och utomhusluften för självdragsventilation samt kontrollerad ventilation styrd av uppfinningen. Punkter över den diagonala linjen visar ett tillstånd då det är högre fuktighet på insidan (vinden) än på utsidan. Punkten under den diagonala linjen visar på ett torrare klimat på insidan. Med självdragsventilation dominerar regionen över diagonalen. Detta tyder på att inomhusluften (vindsluften) består av utomhusluft med extra fukttillskott från byggfukt eller luftflöde genom vindsbjälklaget. Med kontrollerad ventilation hålls inomhusluften (vindsluften) i ett torrare tillstånd än utomhusluften. Figur 7 visar fläktvarvtalet då en varvtalsstyrd tilluftsfläkt används i uppfinningen. Fläkthastigheten är i detta exempel direkt proportionell mot skillnaden i ångtryck mellan vinden och utomhusluften.</p>
+
+<!-- EPO <DP n="11"> -->
+<p id="p0039" num="0039">I uppfinningen beskriven häri är därmed den forcerade ventilationen av kallvinden på ett vanligt bostadshus aktiverad när det är fördelaktigt för uttorkning av utrymmet. Genom att systematiskt slå på och av ventilationen reduceras fuktigheten eller hålls på en nivå som inte är skadlig för byggnaden. På detta sätt kan nedbrytning av byggnadsmaterialen och biologisk påväxt kontrolleras eller elimineras.</p>
+<heading>
+
+Tekniken är baserad på följande generella koncept som bäst tillämpas i vindsutrymmen:</heading>
+<p id="p0040" num="0040">• Lufttätt (så tätt som möjligt - ett helt lufttätt utrymme är normalt inte möjligt att uppnå) vindsutrymmet mot exteriören samt interiören under vindsutrymmet.</p>
+<heading>
+
+• En styrd tilluftsfläkt eller ventilationsöppning</heading>
+<p id="p0041" num="0041">• Ventilationsspjäll för att eliminera oavsiktlig ventilation under perioder då ventilationen bör vara avstängd</p>
+<heading>
+
+• Givare av känd teknik</heading>
+<p id="p0042" num="0042">o En eller flera för relativ fuktighet samt en för temperatur på insidan av</p>
+<heading>
+
+utrymmet</heading>
+<p id="p0043" num="0043">o En eller flera för relativ fuktighet samt en för temperatur på utsidan av</p>
+<heading>
+
+utrymmet (exteriören)</heading>
+<p id="p0044" num="0044">o Alternativt två eller flera sensorer för vattenångans partialtryck, en eller flera på insidan och en eller flera på utsidan av utrymmet.</p>
+<heading>
+
+• Ett eldrivet reglersystem av känd teknik</heading>
+<p id="p0045" num="0045">• Tillägg: ett användargränssnitt bestående av en display och/eller Internet uppkoppling kan användas.</p>
+<heading>
+
+Metoden är baserad på:</heading>
+<p id="p0046" num="0046">• Ett kontinuerligt flöde av uppmätt mätdata avseende fuktförhållanden och temperatur för luft utanför och inuti utrymmet. • Ett beräknat glidande medelvärde av ångtryck, baserat på uppmätta fuktighets- och temperaturvärden, typiskt över en tidsperiod på mellan 10-15 minuter. • Alternativt kan regleringen baseras på stickprovsdata taget med en tidsintervall på 10-15 minuter. • Tilluftsventilationen slås på eller hålls på om vattenångans partialtryck är högre i luften på insidan än i luften på utsidan. • Tilluftsventilationen kan styras med avseende på skillnaden mellan invändigt och utvändigt ångtryck och/eller temperatur. <!-- EPO <DP n="12"> -->
+• Tilluftsventilationen stängs av eller hålls avstängd om vattenångans partialtryck är lägre i luften på insidan än i luften på utsidan.</p>
+<p id="p0047" num="0047">Det beräknade ångpartialtrycket är baseras på mätningar av relativ fuktighet (RH) och temperatur (T). <i>Parametern X,</i> som är kvoten mellan ångtrycket på insidan och ångtrycket på utsidan, bestämmer funktionen för fläkten:</p>
+<heading>
+
+• <i>OmI&gt;</i> 1 bör tilluftsfläkten vara på</heading>
+<heading>
+
+• <i>Om X&lt; 1 bör tilluftsfläkten vara av</i></heading>
+<p id="p0048" num="0048">En approximativ formel kan användas för att beräkna X I nedanstående formel är konstanterna <i>a, b</i> och <i>n</i> använda, dessa beror på temperaturen. Indexen <i>i</i> och <i>e</i> hänvisar till den invändiga temperaturen i det ventilerade utrymmet respektive den utvändiga temperaturen.<maths num=""><img he="53" wi="172" file="0001.tif" img-format="tif" img-content="math" inline="no"/></maths></p>
+<p id="p0049" num="0049">Fuktkontroll på kallvindar är en viktig tillämpning av teknologin. I detta fall är fläkten monterad någonstans i vindens yttre skal, det vill säga där en kanal som kopplar utomhusluften till luften i vinden kan dras genom skalet. Två givare är monterade på insidan av vinden, dock inte för nära tilluftsfläkten. Två givare är monterade på utsidan skyddade från påverkan av direkt solljus och nederbörd. Givarna bör även ha minimal sikt mot himlen för att undvika kylning genom långvågig strålning.</p>
+<p id="p0050" num="0050">Medan uppfinningen har beskrivits med referens till specifika tillämpningar, noteras det att det finns åtskilliga möjliga variationer, modifieringar och tillämpningar. Således ska alla sådana variationer, modifieringar och tillämpningar betraktas som varande inom andemeningen och omfånget för uppfinningen.</p></description>
+<!-- EPO <DP n="13"> -->
+<claims lang="sv">
+<claim id="c-sv-0001" num="0001"><claim-text>
+
+1. System för reglering av fuktighet i en innesluten struktur innefattande:<claim-text>
+
+a) en yttre sensor för fuktighet;</claim-text><claim-text>
+
+b) en yttre sensor för temperatur;</claim-text><claim-text>
+
+c) en inre sensor för fuktighet;</claim-text><claim-text>
+
+d) en inre sensor för temperatur;</claim-text><claim-text>
+
+e) ett ventilationssystem; och</claim-text><claim-text>
+
+f) en datorenhet, som mottar sensorinformation från temperatur- och fuktighetssensorerna, jämför sensorinformation från insidan och utsidan av den inneslutna strukturen och använder jämförelsen av sensorinformation för att alstra en eller flera utgående signaler för att kontrollera ventilationssystemet.</claim-text></claim-text></claim>
+<claim id="c-sv-0002" num="0002"><claim-text>
+
+2. System enligt krav 1, varvid ventilationssystem går igång när vattenångtrycket i luften på insidan av den inneslutna strukturen är högre än vattenångtrycket i luften på utsidan av den inneslutna strukturen, och varvid ventilationssystem stängs av när vattenångtrycket är lägre på insidan av den inneslutna strukturen än på utsidan av den inneslutna strukturen.</claim-text></claim>
+<claim id="c-sv-0003" num="0003"><claim-text>
+
+3. System enligt krav 1, vari datorenheten använder en algoritm för att kontrollera ventilationssystem, vilken algoritm omfattar:<maths num=""><img he="34" wi="170" file="0002.tif" img-format="tif" img-content="math" inline="no"/></maths><br/>
+
+vari a, b och n är konstanter som beror på temperaturen, RH är relativ fuktighet, T är temperatur, <i>i</i> är det inre, e är det yttre, och X är förhållandet mellan vattenångtrycket i luften i den inneslutna strukturen och vattenångtrycket i luften på utsidan av den inneslutna strukturen och vari, när <i>X&gt;\</i> är ventilationssystemet påslaget, och när <i>X&lt;\</i> är ventilationssystemet avslaget.</claim-text></claim>
+<claim id="c-sv-0004" num="0004"><claim-text>
+
+4. System enligt krav 1, som dessutom omfattar en trådlös överföring för att överfora <!-- EPO <DP n="14"> -->
+sensorinformationen till datorenheten.</claim-text></claim>
+<claim id="c-sv-0005" num="0005"><claim-text>
+
+5. System enligt krav 1, som dessutom omfattar kablar för att överföra sensorinformationen till datorenheten.</claim-text></claim>
+<claim id="c-sv-0006" num="0006"><claim-text>
+
+6. System enligt krav 1, vari den inneslutna strukturen väljs från den grupp som består av vindar och loft, hus som används tillfälligtvis, båtar, husvagnar och fraktbehållare.</claim-text></claim>
+<claim id="c-sv-0007" num="0007"><claim-text>
+
+7. System enligt krav 6, vari den inneslutna strukturen är en vind eller ett loft.</claim-text></claim>
+<claim id="c-sv-0008" num="0008"><claim-text>
+
+8. System enligt krav 1, vari den inneslutna strukturen är nära det uppvärmda området i en bostad.</claim-text></claim>
+<claim id="c-sv-0009" num="0009"><claim-text>
+
+9. System enligt krav 1, vari ventilationssystemet innehåller en fläkt.</claim-text></claim>
+<claim id="c-sv-0010" num="0010"><claim-text>
+
+10. System enligt krav 1, vari den inneslutna strukturen föreligger i ett nybyggt hus som har hög fuktighet i material, som använts för att bygga huset.</claim-text></claim>
+<claim id="c-sv-0011" num="0011"><claim-text>
+
+11. System enligt krav 1, vari den inneslutna strukturen innehåller en vind eller ett loft, och mängden ventilation ökas när luften på utsidan är kallare än innerluften, och temperaturen i vinden eller löftet är högre än normal bostadstemperatur.</claim-text></claim>
+<claim id="c-sv-0012" num="0012"><claim-text>
+
+12. System enligt krav 1, som dessutom innehåller en användarmellanyta ansluten till datorenheten.</claim-text></claim>
+<claim id="c-sv-0013" num="0013"><claim-text>
+
+13. Förfarande för att reglera fuktigheten i en innesluten struktur, vilket omfattar att man tillhandahåller systemet enligt krav 1.</claim-text></claim>
+<claim id="c-sv-0014" num="0014"><claim-text>
+
+14. Förfarande enligt krav 12, som dessutom omfattar att man sätter på ventilationssystem när vattenångtrycket i luften på insidan av den inneslutna strukturen är högre än vattenångtrycket i luften på utsidan av den inneslutna strukturen, och stänger av ventilationssystem när vattenångtrycket är lägre på insidan av den inneslutna strukturen än på utsidan av den inneslutna strukturen.</claim-text></claim>
+<!-- EPO <DP n="15"> -->
+<claim id="c-sv-0015" num="0015"><claim-text>
+
+15. Förfarande enligt krav 13, varvid datorenheten använder en algoritm för att kontrollera ventilationssystemet, varvid algoritm omfattar:<maths num=""><img he="36" wi="176" file="0003.tif" img-format="tif" img-content="math" inline="no"/></maths><br/>
+
+vari a, b och n är konstanter som beror på temperaturen, RH är relativ fuktighet, T är temperatur, / är det inre, e är det yttre, och X är förhållandet mellan vattenångtrycket i luften i den inneslutna strukturen och vattenångtrycket i luften på utsidan av den inneslutna strukturen och vari, närX&gt;l är ventilationssystemet påslaget, och <i>när X&lt;\</i> är ventilationssystemet avslaget.</claim-text></claim>
+<claim id="c-sv-0016" num="0016"><claim-text>
+
+16. Förfarande enligt krav 13, som dessutom omfattar att man överför sensorinformationen till datorenheten med användning av en trådlös överföring.</claim-text></claim>
+<claim id="c-sv-0017" num="0017"><claim-text>
+
+17. Förfarande enligt krav 13, som dessutom omfattar att man överför sensorinformationen till datorenheten genom kablar.</claim-text></claim>
+<claim id="c-sv-0018" num="0018"><claim-text>
+
+18. Förfarande enligt krav 13, varvid mängden ventilation ökas när skillnaden i vattenångtryck mellan insidan och utsidan på den inneslutna strukturen ökar.</claim-text></claim>
+<claim id="c-sv-0019" num="0019"><claim-text>
+
+19. Förfarande enligt krav 13, varvid den inneslutna strukturen innehåller en vind eller ett loft, och mängden ventilation ökas när luften på utsidan är kallare än innerluften, och temperaturen i vinden eller löftet är högre än normal bostadstemperatur.</claim-text></claim>
+<claim id="c-sv-0020" num="0020"><claim-text>
+
+20. System för reglering av fuktighet i en innesluten struktur innefattande:<claim-text>
+
+a) en yttre sensor för fuktighet;</claim-text><claim-text>
+
+b) en yttre sensor för temperatur;</claim-text><claim-text>
+
+c) en inre sensor för fuktighet;</claim-text><claim-text>
+
+d) en inre sensor för temperatur;</claim-text><claim-text>
+
+e) ett ventilationssystem; och</claim-text><claim-text>
+
+f) en datorenhet, som mottar sensorinformation från temperatur- och <!-- EPO <DP n="16"> -->
+fuktighetssensorerna, jämför sensorinformation från insidan och utsidan av den inneslutna strukturen och använder jämförelsen av sensorinformation för att alstra en eller flera utgående signaler för att kontrollera ventilationssystemet,<br/>vari ventilationssystemet sätts på när vattenångtrycket i luften på insidan av den inneslutna strukturen är högre än vattenångtrycket i luften på utsidan av den inneslutna strukturen, och vari ventilationssystemet stängs av när vattenångtrycket är lägre på insidan av den inneslutna strukturen än på utsida av den inneslutna strukturen.</claim-text></claim-text></claim></claims>
+<!-- EPO <DP n="17"> -->
+<drawings><figure num=""><img he="234" wi="170" file="0004.tif" img-format="tif" img-content="drawing" inline="no"/></figure>
+<!-- EPO <DP n="18"> -->
+<figure num=""><img he="125" wi="170" file="0005.tif" img-format="tif" img-content="drawing" inline="no"/></figure>
+<!-- EPO <DP n="19"> -->
+<figure num=""><img he="117" wi="170" file="0006.tif" img-format="tif" img-content="drawing" inline="no"/></figure>
+<!-- EPO <DP n="20"> -->
+<figure num=""><img he="152" wi="158" file="0007.tif" img-format="tif" img-content="drawing" inline="no"/></figure>
+<!-- EPO <DP n="21"> -->
+<figure num=""><img he="206" wi="158" file="0008.tif" img-format="tif" img-content="drawing" inline="no"/></figure>
+</drawings>
+</ep-ocr-patent-document>

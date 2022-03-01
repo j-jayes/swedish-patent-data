@@ -1,0 +1,108 @@
+---
+title: "05-tables"
+author: "JJayes"
+date: "07/02/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(gt)
+```
+
+```{r}
+icons <- tibble(icons = c("figures/icons/titles.svg", "figures/icons/descriptions.svg", "figures/icons/patents.svg",
+                          ""),
+                description = c("Titles",
+                                "Descriptions",
+                                "Patents",
+                                md("**Status:**")))
+
+sources <- tibble(SCB_ssyk = c("X", "X", "", md("**Acquired**")),
+                  google_patents = c("", "", "X", md("**Acquired**")),
+                  riksvakanslistan = c("X", "X", "", md("**To digitize**")),
+                  prv_patents = c("", "", "X", md("**To digitize**")))
+
+icons %>%
+  bind_cols(sources) %>%
+  gt() %>%
+  tab_header(title = "Sources") %>%
+  tab_style(
+    style = cell_borders(sides = "l", color = "grey20", style = "solid", weight = "1px"),
+    locations = cells_body(
+      columns = everything(),
+      rows = everything()
+    )
+  ) %>%
+  tab_style(
+    style = cell_borders(sides = c("l"), color = "darkred", style = "dashed", weight = "3px"),
+    locations = cells_body(
+      columns = c(riksvakanslistan),
+      rows = everything()
+    )
+  ) %>%
+  tab_style(
+    style = cell_borders(sides = c("r"), color = "darkred", style = "dashed", weight = "3px"),
+    locations = cells_body(
+      columns = c(prv_patents),
+      rows = everything()
+    )
+  ) %>%
+  tab_style(
+    style = cell_borders(sides = c("t"), color = "darkred", style = "dashed", weight = "3px"),
+    locations = cells_body(
+      columns = c(riksvakanslistan, prv_patents),
+      rows = 1
+    )
+  ) %>%
+  tab_style(
+    style = cell_borders(sides = c("b"), color = "darkred", style = "dashed", weight = "3px"),
+    locations = cells_body(
+      columns = c(riksvakanslistan, prv_patents),
+      rows = 4
+    )
+  ) %>%
+  tab_style(
+    style = cell_borders(sides = c("r"), color = "grey80", style = "solid", weight = "3px"),
+    locations = cells_body(
+      columns = description,
+      rows = everything()
+    )
+  ) %>%
+  tab_style(
+    style = cell_text(align = "center"),
+    locations = cells_body(
+      columns = everything(),
+      rows = everything()
+    )
+  ) %>%
+  cols_label(
+    icons = md("**Component**"),
+    riksvakanslistan = md("**Riksvakanslistan**"),
+    description = "",
+    google_patents = md("**Google Patents**"),
+    prv_patents = md("**PRV Patents**"),
+    SCB_ssyk = md("**SCB Occ. Classification**")
+  ) %>%
+  text_transform(
+    locations = cells_body(
+      columns = icons,
+      rows = c(1, 2, 3)
+    ),
+    fn = function(x) {
+      local_image(
+        filename = paste0(x),
+        height = as.numeric(75)
+      )
+    }
+  ) %>%
+  tab_style(
+    style = cell_fill(color = "#D3D3D3", alpha = .7),
+    locations = cells_column_labels(columns = everything())
+  ) %>%
+  fmt_markdown(columns = everything(), rows = 4) %>% 
+  tab_options(table.width = 800)
+
+```
+
