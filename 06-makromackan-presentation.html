@@ -19,7 +19,7 @@ class: center, middle, inverse, title-slide
 # Labour Augmenting and Automating Technology in 20th C Sweden
 ## Work in progress
 ### Jonathan Jayes, Kerstin Enflo, Jakob Molinder
-### <a href="https://interludeone.com/">Makromackan</a> 01 March, 2022
+### <a href="https://interludeone.com/">Makromackan</a> 02 March, 2022
 
 ---
 
@@ -194,6 +194,183 @@ Between 1915 and 1920 the proportion of the country's arable land belonging to f
 # How do we measure technological change?
 
 Focussing 
+
+---
+
+class: inverse, center, middle
+name: digitize
+
+# How can we digitize it?
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=796px&gt;&lt;/html&gt;
+
+---
+
+class: inverse, middle
+
+# Regular extraction pipeline
+
+- On my local machine
+
+- Based on regular expression
+
+- Works fine for text
+
+---
+
+# Regular extraction pipeline
+
+.panelset[
+.panel[.panel-name[Pre-processing image]
+
+.pull-left[
+
+
+```r
+image &lt;- image_read(here("data", "riksvakanslistan", "kontor.PNG"))
+
+image %&gt;% 
+  # tune this parameter
+  image_deskew(threshold = 1000) %&gt;% 
+  image_despeckle() %&gt;% 
+  # makes grayscale
+  image_quantize(max = 255, 
+                 colorspace = "gray", 
+                 dither = T) %&gt;% 
+  image_write(here("data", "riksvakanslistan", "kontor_processed.PNG"))
+```
+
+
+]
+
+.pull-right[
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="data/riksvakanslistan/kontor.PNG" alt="Original image" width="2169" /&gt;
+&lt;p class="caption"&gt;Original image&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="data/riksvakanslistan/kontor_processed.PNG" alt="Processed image" width="2176" /&gt;
+&lt;p class="caption"&gt;Processed image&lt;/p&gt;
+&lt;/div&gt;
+
+]
+
+]
+
+.panel[.panel-name[Extract text]
+
+.pull-left[
+
+
+```r
+library(tesseract)
+
+text &lt;- image %&gt;% 
+  # use Swedish language model
+  image_ocr(language = "swe")
+
+text
+```
+
+]
+
+.pull-right[
+
+
+|Text                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|Kontor i: Stockholm: Södertälje, Norrtälje; Uppsala: Enköping, Tierp, Skutskär; Eskilstuna: Nyköping, Sträng C — Flen; Norrköping; Linköping: Söderköping, Skänninge, Vadstena, Motala, Valdemarsvik, Mjölby, Ode Östra Husby, Finspong, Borensberg; Jönköping: Eksjö, Nässjö, Tranås, Vetlanda, Värnamo, Gislaved; Växjö: Ljungby, Älmhult; Väs Kalmar: Nybro, Torsås; Visby; Karlskrona: Ronneby, Karlshamn, Sölvesborg; Kristianstad: Hässleholm, Ängelholm, Tomelilla, Å M ) Landskrona, Hälsingborg, Ystad, Trälleborg, Eslöv, Skurup; Halmstad: Laholm, Falkenberg, Varberg, Kungsbacka; Göteborg; Uddevalla: S Lysekil, Marstrand, Kungälv; Vänersborg: Borås, Alingsås, Trollhättan; Skara: Mariestad, Tidaholm, Vara, Skövde; Karlstad: Kristineha Filips Arvika, Säffle; Örebro: Askersund, Lindesberg, Karlskoga, Kopparberg; Västerås: Sala, Köping, Arboga; Falun: Avesta, Mora, Leksand. L Gävle: Söderhamn, Hudiksvall, Ljusdal, Storvik, Harmånger, Bollnäs; Sundsvall: Härnösand, Sollefteå; Östersund: Strömsund, Sveg: Umeå Skellefteå ; Luleå: Piteå, Kiruna, Boden. Fn a ET |
+
+]
+]
+
+
+.panel[.panel-name[Transform text]
+
+.pull-left[
+
+
+```r
+text %&gt;% 
+  as_tibble() %&gt;% 
+  separate_rows(value, sep = "\\;") %&gt;% 
+  mutate(value = str_remove(value, "Kontor i:"),
+         value = str_squish(value)) %&gt;% 
+  separate(value, into = c("Region", "Offices"), sep = "\\:") %&gt;% 
+  mutate(Offices = str_squish(Offices))
+```
+
+]
+
+.pull-right[
+
+
+|Region     |Offices                                                                                               |
+|:----------|:-----------------------------------------------------------------------------------------------------|
+|Stockholm  |Södertälje, Norrtälje                                                                                 |
+|Uppsala    |Enköping, Tierp, Skutskär                                                                             |
+|Eskilstuna |Nyköping, Sträng C — Flen                                                                             |
+|Linköping  |Söderköping, Skänninge, Vadstena, Motala, Valdemarsvik, Mjölby, Ode Östra Husby, Finspong, Borensberg |
+|Jönköping  |Eksjö, Nässjö, Tranås, Vetlanda, Värnamo, Gislaved                                                    |
+|Växjö      |Ljungby, Älmhult                                                                                      |
+
+
+]
+]]
+
+---
+
+class: inverse, middle
+
+# AWS Extraction pipeline
+
+- Uses fancy Amazon services Textract and Comprehend
+
+- Based on deep learning
+
+- Works well for tables when you have a good quality scan
+
+---
+
+# AWS Extraction pipeline
+
+&lt;img src="data/riksvakanslistan/AWS_pipeline (1).svg" style="display: block; margin: auto;" /&gt;
+
+---
+# AWS Extraction pipeline
+
+### Demo:
+
+.pull-left[
+
+&lt;img src="data/riksvakanslistan/gold_standard_1_processed.JPG" width="1991" style="display: block; margin: auto;" /&gt;
+
+]
+
+.pull-right[
+
+
+|          |1929 |1930  |1931 |1931 |1931  |1931 |
+|:---------|:----|:-----|:----|:----|:-----|:----|
+|          |end  |of- - |Jan. |Apl. |June. |Aug. |
+|Wheat     |107  |53    |52   |55   |53    |47   |
+|Maize     |74   |44    |38   |49   |39    |35   |
+|Butter    |85   |64    |64   |58   |56    |57   |
+|Tea       |81   |90    |88   |76   |69    |55   |
+|Coffee    |69   |51    |49   |54   |41    |41   |
+|Cotton    |89   |51    |51   |54   |45    |37   |
+|Wool Tops |68   |48    |46   |51   |47    |48   |
+|Jute      |87   |51    |47   |50   |52    |48   |
+|Pig Iron  |110  |96    |90   |89   |89    |89   |
+|Copper    |99   |67    |65   |62   |51    |47   |
+|Tin       |80   |50    |52   |51   |47    |51   |
+|Rubber    |93   |53    |48   |36   |35    |29   |
+
+
+]
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

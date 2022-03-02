@@ -123,7 +123,7 @@ knitr::include_graphics("slides/exposure_risk.png")
 .panel[.panel-name[Emergent middle class]
 
 ```{r, out.width="60%"}
-knitr::include_graphics("slides/IMG_0394.PNG")
+knitr::include_graphics("slides/Ridgeplot_Anton.jpeg")
 ```
 
 See table from [Anton]()
@@ -219,3 +219,177 @@ include_graphics("slides/vattenfall_consumption.jpg")
 # How do we measure technological change?
 
 Focussing 
+
+---
+
+class: inverse, center, middle
+name: digitize
+
+# How can we digitize it?
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
+---
+
+class: inverse, middle
+
+# Regular extraction pipeline
+
+- On my local machine
+
+- Based on regular expression
+
+- Works fine for text
+
+---
+
+# Regular extraction pipeline
+
+.panelset[
+.panel[.panel-name[Pre-processing image]
+
+.pull-left[
+
+```{r, eval=F, echo=T}
+image <- image_read(here("data", "riksvakanslistan", "kontor.PNG"))
+
+image %>% 
+  # tune this parameter
+  image_deskew(threshold = 1000) %>% 
+  image_despeckle() %>% 
+  # makes grayscale
+  image_quantize(max = 255, 
+                 colorspace = "gray", 
+                 dither = T) %>% 
+  image_write(here("data", "riksvakanslistan", "kontor_processed.PNG"))
+```
+
+
+]
+
+.pull-right[
+
+```{r, fig.cap="Original image"}
+knitr::include_graphics("data/riksvakanslistan/kontor.PNG")
+```
+
+```{r, fig.cap="Processed image"}
+knitr::include_graphics("data/riksvakanslistan/kontor_processed.PNG")
+```
+
+]
+
+]
+
+.panel[.panel-name[Extract text]
+
+.pull-left[
+
+```{r, echo=T, eval=F}
+library(tesseract)
+
+text <- image %>% 
+  # use Swedish language model
+  image_ocr(language = "swe")
+
+text
+```
+
+]
+
+.pull-right[
+
+```{r}
+text <- read_rds("data/riksvakanslistan/text.rds")
+
+text %>% 
+  str_squish() %>% 
+  knitr::kable(col.names = "Text")
+```
+
+]
+]
+
+
+.panel[.panel-name[Transform text]
+
+.pull-left[
+
+```{r, echo=T, eval=F}
+text %>% 
+  as_tibble() %>% 
+  separate_rows(value, sep = "\\;") %>% 
+  mutate(value = str_remove(value, "Kontor i:"),
+         value = str_squish(value)) %>% 
+  separate(value, into = c("Region", "Offices"), sep = "\\:") %>% 
+  mutate(Offices = str_squish(Offices))
+```
+
+]
+
+.pull-right[
+
+```{r}
+text <- read_rds("data/riksvakanslistan/text.rds")
+
+text %>% 
+  as_tibble() %>% 
+  separate_rows(value, sep = "\\;") %>% 
+  mutate(value = str_remove(value, "Kontor i:"),
+         value = str_squish(value)) %>% 
+  separate(value, into = c("Region", "Offices"), sep = "\\:") %>% 
+  mutate(Offices = str_squish(Offices)) %>% 
+  filter(!is.na(Offices)) %>% 
+  head() %>% 
+  knitr::kable()
+
+```
+
+
+]
+]]
+
+---
+
+class: inverse, middle
+
+# AWS Extraction pipeline
+
+- Uses fancy Amazon services Textract and Comprehend
+
+- Based on deep learning
+
+- Works well for tables when you have a good quality scan
+
+---
+
+# AWS Extraction pipeline
+
+```{r}
+knitr::include_graphics("data/riksvakanslistan/AWS_pipeline (1).svg")
+```
+
+---
+# AWS Extraction pipeline
+
+### Demo:
+
+.pull-left[
+
+```{r}
+knitr::include_graphics("data/riksvakanslistan/gold_standard_1_processed.JPG")
+```
+
+]
+
+.pull-right[
+
+```{r}
+df <- read.csv("output_1.csv") %>% as_tibble()
+
+df %>% knitr::kable(col.names = c("", "1929", "1930", "1931", "1931", "1931", "1931"))
+```
+
+
+]
+

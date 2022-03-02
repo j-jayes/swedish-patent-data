@@ -22,7 +22,7 @@ icons <- tibble(icons = c("figures/icons/titles.svg", "figures/icons/description
 sources <- tibble(SCB_ssyk = c("X", "X", "", md("**Acquired**")),
                   google_patents = c("", "", "X", md("**Acquired**")),
                   riksvakanslistan = c("X", "X", "", md("**To digitize**")),
-                  prv_patents = c("", "", "X", md("**To digitize**")))
+                  prv_patents = c("", "", "X", md("**Acquired**")))
 
 icons %>%
   bind_cols(sources) %>%
@@ -45,21 +45,21 @@ icons %>%
   tab_style(
     style = cell_borders(sides = c("r"), color = "darkred", style = "dashed", weight = "3px"),
     locations = cells_body(
-      columns = c(prv_patents),
+      columns = c(riksvakanslistan),
       rows = everything()
     )
   ) %>%
   tab_style(
     style = cell_borders(sides = c("t"), color = "darkred", style = "dashed", weight = "3px"),
     locations = cells_body(
-      columns = c(riksvakanslistan, prv_patents),
+      columns = c(riksvakanslistan),
       rows = 1
     )
   ) %>%
   tab_style(
     style = cell_borders(sides = c("b"), color = "darkred", style = "dashed", weight = "3px"),
     locations = cells_body(
-      columns = c(riksvakanslistan, prv_patents),
+      columns = c(riksvakanslistan),
       rows = 4
     )
   ) %>%
