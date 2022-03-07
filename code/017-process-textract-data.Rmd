@@ -49,6 +49,60 @@ df <- df %>%
   janitor::clean_names()
 ```
 
+```{r}
+patents <- read_rds("data/patent-info-prv/Electricity_patents_list_prv_19-01-22.rds")
+
+df <- df %>% mutate(publication_number = str_remove(patent, "SE")) %>% 
+  inner_join(patents)
+
+df <- df %>% 
+  mutate(year = year(filing_date),
+         decade = year - year %% 10) %>% 
+  select(-year)
+```
+
+
+```{r}
+library(tidylo)
+library(tidytext)
+
+library(stopwords)
+
+stopwords_sv <- stopwords(language = "sv") %>% 
+  as_tibble() %>% 
+  rename(word = value)
+
+df_tidylo <- df %>% 
+  unnest_tokens(word, text) %>% 
+  anti_join(stopwords_sv)
+
+
+df_tidylo_counts <- df_tidylo %>% 
+  count(word, decade, sort = T)
+
+df_tidylo_log_odds <- df_tidylo_counts %>%
+  bind_log_odds(decade, word, n) 
+
+df_tidylo_log_odds %>%
+  arrange(-log_odds_weighted)
+
+df_tidylo_log_odds %>%
+  filter(nchar(word) > 4,
+         !word %in% c("genom", "enligt")) %>% 
+  group_by(decade) %>%
+  top_n(10) %>%
+  ungroup %>%
+  mutate(word = reorder(word, log_odds_weighted)) %>%
+  ggplot(aes(log_odds_weighted, word, fill = factor(decade))) +
+  geom_col(show.legend = FALSE) +
+  scale_fill_brewer(palette = "Dark2") +
+  facet_wrap(~decade, scales = "free") +
+  labs(y = NULL,
+       x = "Specificity of word to decade's patents") 
+```
+
+
+
 
 at page 11 of results
 

@@ -253,9 +253,9 @@ knitr::include_graphics("slides/mail-sorting-machine.jpg")
 
 .pull-left[
 
-These sources of innovation create new demands for expert knowledge and specific competencies that drive occupational specialization and hence the creation of new work tasks. 
+Innovations create new demands for expert knowledge and specific competencies that drive **occupational specialization** and hence the creation of new work tasks. 
 
-For example, the invention of solar panels requires the existence of solar photovoltaic engineers.
+For example, the invention of solar panels created the demand for solar photovoltaic engineers.
 
 ]
 
@@ -269,14 +269,9 @@ knitr::include_graphics("slides/solar-install.jpg")
 ]
 ---
 
-# 
+class: inverse, center, middle
 
----
-
-```{r}
-c("These devices create a photovoltaic DC current through the photovoltaic effect. Often these solar cells are linked together electrically to make a combination of cells into a solar panel or a PV (photovoltaic) panel.")
-```
-
+# How do we know if a technology is labour augmenting or labour replacing?
 
 ---
 
@@ -288,15 +283,18 @@ c("These devices create a photovoltaic DC current through the photovoltaic effec
 
 .pull-left[
 
-We want to compare the similarity of:
+We want to compare three texts and find the similarity between:
 
-1. Labour outputs, e.g. occupational titles,
 
-1. Labour inputs, e.g. a description of what the worker does
+* Types of new technology being brought to market, e.g. patents
 
 and
 
-* Types of new technology being brought to market, e.g. patents
+1. Labour outputs, e.g. occupational titles, and
+
+1. Labour inputs, e.g. a description of what the worker does
+
+
 
 ]
 
@@ -307,7 +305,11 @@ and
 ```{r}
 autor_needs <- tibble(title = "Medical Technologist",
        tasks = "Performs medical laboratory tests, procedures, analyses to provide data for diagnosis, treatment and prevention of disease",
-       tech = "Theranos blood testing machine that can do these things")
+       tech = "Theranos blood testing machine that can do all of the tests")
+
+autor_sources <- c(title = "From the Census Index of Alphabetical Occupations",
+                   tasks = "From the Dictionary of Occupational Titles",
+                   tech = "From US patent database")
 
 # autor_needs %>% kable(col.names = c("Title", "Task", "Tech"))
 
@@ -316,11 +318,13 @@ icons <- tibble(title = "figures/icons/titles.svg",
                 tech = "figures/icons/patents.svg")
 
 autor_needs <- autor_needs %>% 
+  bind_rows(autor_sources) %>% 
   bind_rows(icons)
 
 autor_needs %>%
+  relocate(tech, .before = title) %>% 
   gt() %>%
-  tab_header(title = "Example of comparison") %>%
+  # tab_header(title = "Example of comparison") %>%
   tab_style(
     style = cell_borders(sides = "l", color = "grey20", style = "solid", weight = "1px"),
     locations = cells_body(
@@ -332,7 +336,7 @@ autor_needs %>%
     style = cell_text(align = "center"),
     locations = cells_body(
       columns = everything(),
-      rows = 2
+      rows = 3
     )
   ) %>%
   cols_label(
@@ -343,7 +347,7 @@ autor_needs %>%
   text_transform(
     locations = cells_body(
       columns = c(title, tasks, tech),
-      rows = 2
+      rows = 3
     ),
     fn = function(x) {
       local_image(
@@ -355,6 +359,16 @@ autor_needs %>%
     tab_style(
     style = cell_fill(color = "#D3D3D3", alpha = .7),
     locations = cells_column_labels(columns = everything())
+  ) %>% 
+    gt::tab_style(
+    style = list(
+      cell_text(style = "italic")
+    ),
+    locations = list(
+      cells_body(
+        # cols = gt::everything(),
+                 rows = 2)
+    )
   )
 
 ```
@@ -364,86 +378,109 @@ autor_needs %>%
 
 ---
 
-# Methodology: example
+# How do we measure closeness?
 
-.pull-left[
+```{r}
+knitr::include_graphics("slides/word2vec.png")
+```
+
+.center[Word2Vec word embedding example from [Google AI](https://arxiv.org/abs/1301.3781)]
+
+---
+
+# Labour automation example
+
+.left-column[
 
 <br>
 
 ```{r}
-lat <- tibble(patent = c("US7605498B2: Systems for highly efficient solar power conversion"),
-              title = c("Solar photovoltaic electrician"))
-
-icons <- tibble(title = "figures/icons/titles.svg",
-                # tasks = "figures/icons/descriptions.svg",
-                patent = "figures/icons/patents.svg")
-
-lat %>% 
-  bind_rows(icons) %>% 
-  gt() %>% 
-  cols_label(patent = "Patent",
-             title = "Closest title") %>% 
-    text_transform(
-    locations = cells_body(
-      columns = c(patent, title),
-      rows = 2
-    ),
-    fn = function(x) {
-      local_image(
-        filename = paste0(x),
-        height = as.numeric(75)
-      )
-    }
-  ) %>% 
-  tab_header(title = "Labour augmenting technology",
-             subtitle = "Solar = new tech!")
+knitr::include_graphics("slides/mail-sorting-machine.jpg")
 ```
-
 
 ]
 
-.pull-right[
+.right-column[
 
-<br>
 
-```{r}
-lat <- tibble(patent = c("US3938435A: Automatic mail processing apparatus"),
-              title = c("Mail and paper handlers"),
-              tasks = c("Sorts and processes mail in post office: Sorts incoming or outgoing mail into mail rack pigeonholes or into mail sacks according to destination"))
 
-icons <- tibble(
-  title = "figures/icons/titles.svg",
-  tasks = "figures/icons/descriptions.svg",
-  patent = "figures/icons/patents.svg"
-)
+The text of patent **US3938435A: Automatic mail processing apparatus** reads:
 
-lat %>% 
-  bind_rows(icons) %>% 
-  gt() %>% 
-    cols_label(patent = "Patent",
-             title = "Title",
-             tasks = "Closest task") %>% 
-    text_transform(
-    locations = cells_body(
-      columns = c(patent, title, tasks),
-      rows = 2
-    ),
-    fn = function(x) {
-      local_image(
-        filename = paste0(x),
-        height = as.numeric(75)
-      )
-    }
-  ) %>% 
-  tab_header(title = "Labour automating technology",
-             subtitle = "No more mail sorters!")
-```
+<blockquote>
+
+Linear sorting machines in which incoming letters are removed from a stream at selected points, for use in a post office.
+
+</blockquote>
+
+The closest task description is for **DOT Code: 209.687-014: Mail handler or distribution clerk** which reads:
+
+<blockquote>
+
+Sorts and processes mail in post office: Sorts incoming or outgoing mail into mail rack pigeonholes or into mail sacks according to destination
+
+
+</blockquote>
 
 
 ]
 
 ---
 
+# Is 
+
+```{r}
+
+tibble(y = c(4, 2, 1),
+       x = c(.5, 1, 0),
+       yend = c(1, 2, 4),
+       xend = c(1, 1, 1),
+       label = c("Sorts and processes mail in post office: \nSorts incoming or outgoing mail into mail rack pigeonholes or into mail sacks according to destination", 
+                 "Linear sorting machines in which incoming letters are removed from a stream at selected points, for use in a post office", 
+                 "Closest title")) %>% 
+  ggplot(aes(x, y, label = label, colour = label)) +
+  geom_point() +
+  geom_label() +
+  geom_segment(aes(x = x, xend = xend,y = y,yend= yend)) +
+  theme_void() +
+  theme(legend.position = "none")
+
+```
+
+
+---
+
+# Labour augmentation example
+
+.left-column[
+
+<br>
+
+```{r}
+knitr::include_graphics("slides/solar-install.jpg")
+```
+
+]
+
+.right-column[
+
+
+Solar panels necessitate electricians to design and install them.
+
+The text of patent **US7605498B2: Systems for highly efficient solar power conversion** reads:
+
+<blockquote>
+
+These devices create a photovoltaic DC current through the photovoltaic effect. Often these solar cells are linked together electrically to make a combination of cells into a solar panel or a PV (photovoltaic) panel...
+
+</blockquote>
+
+The closest title in the CAI is for ** Solar photovoltaic electrician**
+
+Because the 
+
+
+]
+---
 
 # Methodology
 
@@ -454,7 +491,7 @@ include_graphics("slides/electricity_patents.jpg")
 
 ---
 
-# What do we add to Autor and the boys?
+# What do we add to Autor and the gang?
 
 .panelset[
 
@@ -651,6 +688,13 @@ knitr::include_graphics("data/riksvakanslistan/top-left-table.PNG")
 
 ]
 
+.panel[.panel-name[Free text of vacancies]
+
+```{r, out.width="80%"}
+knitr::include_graphics("slides/free_text_riks.JPG")
+```
+
+]
 
 .panel[.panel-name[Job seekers]
 
@@ -665,6 +709,7 @@ knitr::include_graphics("data/riksvakanslistan/platssökande.PNG")
 ```
 
 ]]
+
 
 ---
 # Riksvakanslistan: Who is included?
@@ -739,6 +784,28 @@ knitr::kable(shop_assistant, col.names = c("Vacancy ad", "English translation"))
 ]]
 
 
+---
+
+# Riksvakanslistan
+
+### What is new work?
+
+.pull-left[
+
+- Just count the number of times a title appears
+
+- If a title moves from free text to the grid above
+
+]
+
+.pull-right[
+
+```{r}
+include_graphics("slides/free_text_riks_edit.jpg")
+```
+
+.center[Illustration of title moving up from free text to grid - snapshot of Riksvakanslistan dated 7 July 1916 at LUB]
+]
 ---
 
 # Distriktvakanslistan
@@ -921,6 +988,21 @@ lan_map_24 %>%
 
 
 ]
+
+
+---
+
+# What can we test?
+
+<blockquote>
+
+Our finding that employment rises in occupations exposed to augmentation innovations is novel to the literature and illustrates the power of distinguishing among innovations according to their economic content.
+
+</blockquote>
+
+[Autor, Salomons and Seegmiller (2021)](https://economics.mit.edu/files/21810)
+
+
 
 ---
 
