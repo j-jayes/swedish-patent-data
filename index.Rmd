@@ -225,6 +225,62 @@ knitr::include_graphics("slides/new_frontiers.PNG")
 
 # Methodology
 
+### What is labour automation?
+
+.pull-left[
+
+The content of human work is replaced by machines:
+
+For example, a letter sorting machine replaces a human mail sorter.
+
+]
+
+.pull-right[
+
+```{r}
+knitr::include_graphics("slides/mail-sorting-machine.jpg")
+```
+
+
+]
+
+
+---
+
+# Methodology
+
+### What is labour augmentation?
+
+.pull-left[
+
+These sources of innovation create new demands for expert knowledge and specific competencies that drive occupational specialization and hence the creation of new work tasks. 
+
+For example, the invention of solar panels requires the existence of solar photovoltaic engineers.
+
+]
+
+.pull-right[
+
+```{r}
+knitr::include_graphics("slides/solar-install.jpg")
+```
+
+
+]
+---
+
+# 
+
+---
+
+```{r}
+c("These devices create a photovoltaic DC current through the photovoltaic effect. Often these solar cells are linked together electrically to make a combination of cells into a solar panel or a PV (photovoltaic) panel.")
+```
+
+
+---
+
+# Methodology
 
 ### Following methodology of [Autor, Salomons, Seegmiller (2021)](https://economics.mit.edu/files/21810)
 
@@ -445,6 +501,7 @@ office_locations <- read_rds("data/riksvakanslistan/office_locations.rds") %>%
 office_locations <- st_as_sf(office_locations, coords = c("long", "lat"), crs = 4326)
 
 lan_map_24 <- read_rds("data/riksvakanslistan/county_map/county_map.rds")
+
 
 lan_map_24 %>%
   ggplot() +
@@ -776,6 +833,94 @@ df %>%
 - Two sources
 - Electricity patents
 - Log odds specificity
+
+---
+
+class: inverse, center, middle
+name: find
+
+# What might we find?
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
+---
+
+
+# Who were the winners and losers?
+
+.pull-left[
+
+```{r, fig.height=6, fig.width=4}
+office_locations <- read_rds("data/riksvakanslistan/office_locations.rds") %>%
+  filter(!is.na(lat))
+
+office_locations <- st_as_sf(office_locations, coords = c("long", "lat"), crs = 4326)
+
+lan_map_24 <- read_rds("data/riksvakanslistan/county_map/county_map.rds")
+
+lan_info <- readxl::read_excel("data/riksvakanslistan/lans.xlsx") %>% select(lan, new_jobs_rand, loss_jobs_rand)
+
+lan_map_24 <- lan_map_24 %>% 
+  inner_join(lan_info)
+
+lan_map_24 %>%
+  ggplot() +
+  geom_sf(
+    aes(
+      fill = new_jobs_rand
+    )
+  ) +
+  geom_sf(colour = "midnightblue", data = office_locations) +
+  scale_fill_viridis_c(option = "B",
+    # trans = "sqrt", 
+    direction = -1,
+    labels = scales::number_format()) +
+  labs(
+    title = "Labour augmentation simulation",
+    fill = "Labour augmentation index"
+  ) +
+  theme_void()
+
+```
+
+]
+
+.pull-right[
+
+```{r, fig.height=6, fig.width=4}
+office_locations <- read_rds("data/riksvakanslistan/office_locations.rds") %>%
+  filter(!is.na(lat))
+
+office_locations <- st_as_sf(office_locations, coords = c("long", "lat"), crs = 4326)
+
+lan_map_24 <- read_rds("data/riksvakanslistan/county_map/county_map.rds")
+
+lan_info <- readxl::read_excel("data/riksvakanslistan/lans.xlsx") %>% select(lan, new_jobs_rand, loss_jobs_rand)
+
+lan_map_24 <- lan_map_24 %>% 
+  inner_join(lan_info)
+
+lan_map_24 %>%
+  ggplot() +
+  geom_sf(
+    aes(
+      fill = loss_jobs_rand
+    )
+  ) +
+  geom_sf(colour = "midnightblue", data = office_locations) +
+  scale_fill_viridis_c(option = "B",
+    # trans = "sqrt", 
+    direction = -1,
+    labels = scales::number_format()) +
+  labs(
+    title = "Labour automation simulation",
+    fill = "Labour automation index"
+  ) +
+  theme_void()
+```
+
+
+]
 
 ---
 
