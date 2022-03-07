@@ -1,0 +1,78 @@
+
+```{r}
+df <- read_rds("literature/FOBA_network_table.rds") %>%
+  janitor::clean_names()
+
+table_network <- function(author) {
+  df %>%
+    filter(origin == author) %>%
+    select(title, authors, year, citations) %>%
+    reactable::reactable(height = 500)
+
+    # DT::datatable(
+    #   class = "cell-border stripe",
+    #   colnames = c("Title", "Authors", "Year", "Citations"),
+    #   rownames = F,
+    #   options = list(pageLength = 4, dom = "tip")
+    # ) %>%
+    # DT::formatStyle(columns = c(1, 2), fontSize = "50%")
+}
+```
+
+
+.panelset[
+.panel[.panel-name[Automation risk]
+
+```{r}
+table_network("Frey")
+```
+
+]
+
+.panel[.panel-name[Emergent middle class]
+
+```{r}
+table_network("Bengtsson")
+```
+
+]
+
+.panel[.panel-name[Technological change]
+
+```{r}
+table_network("Autor")
+```
+
+
+]]
+
+
+---
+
+# What literature do we build on?
+
+
+.panelset[
+.panel[.panel-name[Automation risk]
+
+```{r, out.width="60%", fig.cap="Network plot - Frey and Osbource (2017)"}
+knitr::include_graphics("slides/Frey-Osbourne-2017.PNG")
+```
+
+]
+
+.panel[.panel-name[Emergent middle class]
+
+```{r, out.width="60%", fig.cap="Network plot - Bengtsson (2020)"}
+knitr::include_graphics("slides/Bengtsson-2020.PNG")
+```
+
+]
+
+.panel[.panel-name[Technological change]
+
+```{r, out.width="60%", fig.cap="Network plot - Autor (2021)"}
+knitr::include_graphics("slides/Autor-2021.PNG")
+```
+
+]]

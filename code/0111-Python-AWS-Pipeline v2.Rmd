@@ -1,0 +1,35 @@
+---
+title: "0111-Python-AWS-Pipeline v2"
+author: "JJayes"
+date: "02/03/2022"
+output: html_document
+---
+
+```{r}
+library(reticulate)
+library(here)
+```
+
+```{python}
+# !pip install boto3[crt]
+import boto3
+```
+
+First I have to configure the AWS client with my credentials. To do this I need to install the [AWS shell](https://github.com/awslabs/aws-shell)?
+
+
+```{python}
+# !pip install aws-shell
+
+# initialize the textract client
+client = boto3.client('textract', region_name = 'us-east-2')
+```
+
+Following [This tutorial](https://docs.aws.amazon.com/textract/latest/dg/examples-export-table-csv.html)
+
+So we have created the python file - now we must use the terminal to get the file to process.
+
+```{r}
+path = "Egentliga Finland_11_16_3_255_gray_dither_cropped_tight.jpg"
+```
+

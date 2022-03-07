@@ -347,3 +347,41 @@ c("Södertälje",
   "")
 ```
 
+
+
+
+
+```{r}
+image <- image_read(here("data", "riksvakanslistan", "IMG_8073_crop.jpg"))
+
+image %>% 
+  # have to tune this parameter
+  image_deskew(threshold = 1000) %>% 
+  image_despeckle() %>% 
+  image_quantize(max = 255, colorspace = "gray", dither = T) %>% 
+  image_rotate(.5) %>% 
+  image_write(here("data", "riksvakanslistan", "IMG_8073_crop_processed_1.jpg"))
+
+image <- image_read(here("data", "riksvakanslistan", "IMG_8073_crop_processed_1.jpg"))
+
+text <- image %>% 
+  image_ocr(language = "swe")
+
+
+text %>% 
+  as_tibble() %>% 
+  separate_rows(value, sep = "\\;") %>% 
+  mutate(value = str_remove(value, "Kontor i:"),
+         value = str_squish(value)) %>% 
+  separate(value, into = c("Region", "Offices"), sep = "\\:") %>% 
+  mutate(Offices = str_squish(Offices))
+
+cities <- text %>% 
+  as_tibble() %>% 
+  separate_rows(value, sep = "\\;") %>% 
+  mutate(value = str_remove(value, "Kontor i:"),
+         value = str_squish(value)) %>% 
+  separate_rows(value, sep = "\\:|\\,") %>% 
+  mutate(value = str_squish(value))
+```
+

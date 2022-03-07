@@ -79,7 +79,7 @@ icons %>%
   ) %>%
   cols_label(
     icons = md("**Component**"),
-    riksvakanslistan = md("**Riksvakanslistan**"),
+    riksvakanslistan = md("**Riksvakanslistan &\nDistriktvakanslistan**"),
     description = "",
     google_patents = md("**Google Patents**"),
     prv_patents = md("**PRV Patents**"),

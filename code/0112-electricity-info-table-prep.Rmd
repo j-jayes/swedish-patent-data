@@ -1,0 +1,263 @@
+---
+title: "electricity-info-table-prep"
+author: "JJayes"
+date: "06/03/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+```
+
+
+## Purpose
+
+make a table from the data 
+
+```{r}
+df <- read.csv("output_13.csv", skip = 5) %>% as_tibble()
+
+df <- df %>% janitor::clean_names()
+```
+
+
+```{r}
+df %>% 
+  select(!x) %>% 
+  rename(kommun = x1) %>% 
+  mutate(kommun = str_squish(kommun)) %>% 
+  pivot_longer(-kommun) %>% 
+  mutate(value = str_remove_all(value, "[a-z]"),
+         value = str_remove_all(value, "[:punct:]"),
+         value = str_remove_all(value, " ")) %>% 
+  mutate(value = parse_number(value)) %>% view
+```
+
+
+
+trying again!
+
+Read in the pdf, convert, desker etc.
+```{r}
+
+# pdf <- image_read_pdf(here("data", "electricity-info", "Jonkoping_lan_p60.pdf"))
+# 
+# jpeg <- image_convert(pdf, format = "jpeg")
+# 
+# jpeg %>% image_write(here("data", "electricity-info", "Jonkoping_lan_p60.jpg"))
+
+library(magick)
+
+image <- image_read(here("data", "electricity-info", "Jonkoping_lan_p60.jpg"))
+
+image %>% 
+  # have to tune this parameter
+  # image_deskew(threshold = 1000) %>% 
+  image_despeckle() %>% 
+  image_quantize(max = 255, colorspace = "gray", dither = T) %>% 
+  # image_rotate(.5) %>% 
+  image_write(here("data", "electricity-info", "Jonkoping_lan_p60_processed_1.jpg"))
+
+image <- image_read(here("data", "electricity-info", "Jonkoping_lan_p60_processed_1.jpg"))
+```
+
+Now bring in the data
+
+```{r}
+df <- read.csv("output_14.csv", skip = 5) %>% as_tibble()
+
+df <- df %>% janitor::clean_names() %>% 
+  select(-x)
+
+df <- df %>% 
+  rename(kommun = x1) %>% 
+  mutate(across(-kommun, as.character)) %>% 
+  pivot_longer(-kommun, names_to = "column") %>% 
+  mutate(value = str_remove_all(value, "[a-z]"),
+         value = str_remove_all(value, "[:punct:]"),
+         value = str_remove_all(value, " "),
+         value = parse_number(value))
+
+
+```
+
+
+Colnames:
+
+from the pdf
+
+```{r}
+names <- tibble(col = 1:12,
+       name = c("kommun",
+                "Antal innevånare",
+                "Areal - landareal",
+                "Areal - odlad areal",
+                "Antal brukningsdelar - större än 3 hektar",
+                "Antal brukningsdelar - totalt antal",
+                "Arligt energibehov vid fullständig elektrifiering och hänfört till kraftstationerna - För närvarande - Hushåll, hantverk, jordbruk och småindustri",
+            "Arligt energibehov vid fullständig elektrifiering och hänfört till kraftstationerna - För närvarande - Storindustri",
+            "Arligt energibehov vid fullständig elektrifiering och hänfört till kraftstationerna - För närvarande - Summa",
+            "Arligt energibehov vid fullständig elektrifiering och hänfört till kraftstationerna - Om c:a 20 år - Hushåll, hantverk, jordbruk och småindustri",
+            "Arligt energibehov vid fullständig elektrifiering och hänfört till kraftstationerna - Om c:a 20 år - Storindustri",
+            "Arligt energibehov vid fullständig elektrifiering och hänfört till kraftstationerna - Om c:a 20 år - Summa"),
+       name_eng = c("municipality",
+                "Number of inhabitants",
+                "Land area",
+                "Cultivated land area",
+                "Number of farm parts - larger than 3 hectares",
+                "Number of farm parts - total",
+                "Annual energy requirement for full electrification and attributable to power stations - Currently - Households, crafts, agriculture and small industry",
+            "Annual energy requirement for complete electrification and attributed to the power stations - Currently - Large-scale industry",
+            "Annual energy requirement for complete electrification and attributed to the power stations - Currently - Total",
+            "Annual energy requirement for complete electrification and attributed to the power stations - In about 20 years - Households, crafts, agriculture and small industry",
+            "Annual energy requirement for complete electrification and attributable to the power stations - In about 20 years - Large-scale industry",
+            "Annual energy requirement for complete electrification and attributable to the power stations - In about 20 years - Total"))
+```
+
+```{r}
+names <- names %>% 
+  slice(-1L) %>% 
+  mutate(column = paste0("x", 2:12))
+
+df <- names %>% 
+  inner_join(df)
+```
+
+
+```{r}
+df %>% write_rds("data/electricity-info/jonkopings_power.rds")
+
+
+df %>%
+  select(col, kommun, value) %>%
+  pivot_wider(names_from = col, values_from = value) %>%
+  head(12) %>%
+  gt() %>%
+  cols_label(
+    kommun = "Municipality",
+    `2` = "Inhabitants",
+    `3` = "Land area",
+    `4` = "Cultivated area",
+    `5` = "> 3 hectares",
+    `6` = "Total",
+    `7` = "Households, etc.",
+    `8` = "Large industry",
+    `9` = "Total",
+    `10` = "Households, etc.",
+    `11` = "Large industry",
+    `12` = "Total"
+  ) %>%
+  tab_spanner(
+    label = "Farm numbers",
+    columns = c(
+      `5`, `6`
+    )
+  ) %>%
+  tab_spanner(
+    label = "Current generation capacity",
+    columns = c(
+      `7`, `8`, `9`
+    )
+  ) %>%
+  tab_spanner(
+    label = "Projected generation capacity",
+    columns = c(
+      `10`, `11`, `12`
+    )
+  ) %>% 
+  fmt_number(-kommun, decimals = 0) %>% 
+  fmt_missing(-kommun, missing_text = " ") %>% 
+  tab_header(title = "Power demand within the various municipalities of Jönköpings län")
+
+
+```
+
+
+
+Now with distriktvakanslistan data
+
+```{r}
+
+
+image <- image_read(here("data", "riksvakanslistan", "IMG_8181.JPG"))
+
+image %>% 
+  # have to tune this parameter
+  image_deskew(threshold = 1000) %>%
+  image_despeckle() %>% 
+  image_quantize(max = 255, colorspace = "gray", dither = T) %>% 
+  # image_rotate(.5) %>% 
+  image_write(here("data",  "riksvakanslistan", "IMG_8181_processed_1.jpg"))
+
+image <- image_read(here("data", "riksvakanslistan", "IMG_8181_processed_1.jpg"))
+
+```
+
+Now do table processing
+
+Now do the table making!
+
+```{r}
+df <- read.csv("output_15.csv", skip = 1) %>% as_tibble()
+
+df <- df %>% 
+  mutate(across(-occ, as.character)) %>% 
+  pivot_longer(-occ, names_to = "column") %>% 
+  mutate(value = str_remove_all(value, "[a-z]"),
+         value = str_remove_all(value, "[:punct:]"),
+         value = str_replace_all(value, "x|X", "88"),
+         value = parse_number(value))
+
+df <- df %>% 
+  distinct(occ, column, value)
+```
+
+
+```{r}
+city_codebook <- read_rds("data/city_codebook.rds") %>% 
+  slice(-2L, -16L, -17L) %>% 
+  select(stan_modern_spell) %>% 
+  mutate(column = paste0("X", row_number())) 
+
+df <- df %>% 
+  filter(column != "X16") %>% 
+  inner_join(city_codebook) %>% 
+  filter(occ != "")
+
+df <- df %>% 
+  select(-column) %>% 
+  mutate(occ = str_squish(occ)) %>% 
+  filter(!is.na(value)) %>% 
+  pivot_wider(names_from = stan_modern_spell, values_from = value)
+
+
+df %>% write_rds("data/riksvakanslistan/vacancies_malmo_17_08_1917.rds")
+
+df %>% 
+  gt() %>% 
+  fmt_missing(everything(), missing_text = "-") %>% 
+  tab_source_note("Note that code 88 means an indefinite number of vacancies") %>% 
+  cols_label(occ = "") %>% 
+  tab_spanner(
+    label = "Malmöhus län",
+    columns = c(
+      Malmö:Skurup
+    )) %>% 
+    tab_spanner(
+    label = "Kristianstads län",
+    columns = c(
+      Kristianstad:Åstorp
+    )) %>% 
+    tab_spanner(
+    label = "Blekinge län",
+    columns = c(
+      Karlskrona:Sölvesborg
+    )) %>% 
+  tab_header(title = "Vacancies for the 17th of August 1917",
+             subtitle = "Arbetsförmedlingen's district vacancy lists")
+```
+
