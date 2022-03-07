@@ -767,51 +767,12 @@ df %>%
 
 
 ---
-# Distriktvakanslistan
 
-```{r}
-df  <-  read_rds("data/riksvakanslistan/vacancies_malmo_17_08_1917.rds")
+# Patents
 
-df %>% 
-  head(9) %>% 
-  gt() %>% 
-  fmt_missing(everything(), missing_text = "-") %>% 
-  tab_source_note("Note that code 88 means an indefinite number of vacancies") %>% 
-  cols_label(occ = "") %>% 
-  tab_spanner(
-    label = "Malmöhus län",
-    columns = c(
-      Malmö:Skurup
-    )) %>% 
-    tab_spanner(
-    label = "Kristianstads län",
-    columns = c(
-      Kristianstad:Åstorp
-    )) %>% 
-    tab_spanner(
-    label = "Blekinge län",
-    columns = c(
-      Karlskrona:Sölvesborg
-    )) %>% 
-  tab_header(title = "Vacancies for the 17th of August 1917",
-             subtitle = "Arbetsförmedlingen's district vacancy lists") %>% 
-  gt::tab_style(
-    style = list(
-      cell_text(weight = "bold")
-    ),
-    locations = list(
-      cells_column_labels(gt::everything())
-    )
-  ) %>% 
-   tab_options(
-    table.width = px(300),
-    table.font.size = "smaller",
-    column_labels.font.size = "small"
-  )
-```
-
----
-
+- Two sources
+- Electricity patents
+- Log odds specificity
 
 ---
 
@@ -1020,7 +981,17 @@ df %>% knitr::kable(col.names = c("", "1929", "1930", "1931", "1931", "1931", "1
 
 
 ---
-# AWS Extraction pipeline
+# AWS Extraction pipeline: works well
+
+```{r, out.width="80%"}
+knitr::include_graphics("data/electricity-info/Jonkoping_lan_p60.jpg")
+```
+
+
+
+---
+
+# AWS Extraction pipeline: works well
 
 ```{r}
 df <- read_rds("data/electricity-info/jonkopings_power.rds")
@@ -1092,7 +1063,70 @@ df %>%
 
 
 ---
-# Digitizing 
+# AWS Extraction pipeline: a bit finicky
+
+.pull-left[
+
+
+```{r}
+knitr::include_graphics("slides/distrikt_top_view_r.JPG")
+```
+
+
+]
+
+.pull-right[
+
+```{r}
+knitr::include_graphics("slides/camera_set_up.jpeg")
+```
+
+
+]
+---
+# AWS Extraction pipeline: a bit finicky
+
+```{r}
+df  <-  read_rds("data/riksvakanslistan/vacancies_malmo_17_08_1917.rds")
+
+df %>% 
+  head(9) %>% 
+  gt() %>% 
+  fmt_missing(everything(), missing_text = "-") %>% 
+  tab_source_note("Note that code 88 means an indefinite number of vacancies") %>% 
+  cols_label(occ = "") %>% 
+  tab_spanner(
+    label = "Malmöhus län",
+    columns = c(
+      Malmö:Skurup
+    )) %>% 
+    tab_spanner(
+    label = "Kristianstads län",
+    columns = c(
+      Kristianstad:Åstorp
+    )) %>% 
+    tab_spanner(
+    label = "Blekinge län",
+    columns = c(
+      Karlskrona:Sölvesborg
+    )) %>% 
+  tab_header(title = "Vacancies for the 17th of August 1917",
+             subtitle = "Arbetsförmedlingen's district vacancy lists") %>% 
+  gt::tab_style(
+    style = list(
+      cell_text(weight = "bold")
+    ),
+    locations = list(
+      cells_column_labels(gt::everything())
+    )
+  ) %>% 
+   tab_options(
+    table.width = px(300),
+    table.font.size = "smaller",
+    column_labels.font.size = "small"
+  )
+```
+
 
 ---
 # Digitizing tips
@@ -1116,3 +1150,8 @@ Things you might be interested in for digitizing your own documents:
     - AWS account set-up ~ 0.5 day
     - Programming a pipeline to digitize your scans ~ 1 day
     - The actual processing is hella fast!
+
+---
+class: inverse, middle, center
+
+# Thank you
