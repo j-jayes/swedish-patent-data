@@ -402,7 +402,7 @@ include_graphics("slides/electricity_patents.jpg")
 
 .panelset[
 
-.panel[.panel-name[An earlier period]
+.panel[.panel-name[An earlier period/country]
 
 ```{r}
 
@@ -466,6 +466,9 @@ lan_map_24 %>%
 ]
 
 .panel[.panel-name[Specific technology]
+
+Graphic from section on patents
+
 ]
 
 
