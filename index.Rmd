@@ -426,29 +426,6 @@ Sorts and processes mail in post office: Sorts incoming or outgoing mail into ma
 
 ---
 
-# Is 
-
-```{r}
-
-tibble(y = c(4, 2, 1),
-       x = c(.5, 1, 0),
-       yend = c(1, 2, 4),
-       xend = c(1, 1, 1),
-       label = c("Sorts and processes mail in post office: \nSorts incoming or outgoing mail into mail rack pigeonholes or into mail sacks according to destination", 
-                 "Linear sorting machines in which incoming letters are removed from a stream at selected points, for use in a post office", 
-                 "Closest title")) %>% 
-  ggplot(aes(x, y, label = label, colour = label)) +
-  geom_point() +
-  geom_label() +
-  geom_segment(aes(x = x, xend = xend,y = y,yend= yend)) +
-  theme_void() +
-  theme(legend.position = "none")
-
-```
-
-
----
-
 # Labour augmentation example
 
 .left-column[
@@ -463,9 +440,6 @@ knitr::include_graphics("slides/solar-install.jpg")
 
 .right-column[
 
-
-Solar panels necessitate electricians to design and install them.
-
 The text of patent **US7605498B2: Systems for highly efficient solar power conversion** reads:
 
 <blockquote>
@@ -476,7 +450,6 @@ These devices create a photovoltaic DC current through the photovoltaic effect. 
 
 The closest title in the CAI is for ** Solar photovoltaic electrician**
 
-Because the 
 
 
 ]
@@ -561,7 +534,23 @@ lan_map_24 %>%
 
 .panel[.panel-name[Specific technology]
 
-Graphic from section on patents
+.pull-left[
+
+```{r}
+knitr::include_graphics("slides/patent_promo.PNG")
+```
+
+
+]
+
+.pull-right[
+
+```{r}
+knitr::include_graphics("figures/patent_counts_by_source.jpeg")
+```
+
+
+]
 
 ]
 
@@ -897,9 +886,26 @@ df %>%
 
 # Patents
 
-- Two sources
-- Electricity patents
-- Log odds specificity
+### What terms are most specific to each decade's electricity patents?
+
+```{r}
+df_tidylo_log_odds  <- read_rds("data/patent-info-prv/electric_patent_graphic.rds")
+
+df_tidylo_log_odds %>%
+  filter(nchar(word) > 4,
+         !word %in% c("genom", "enligt")) %>% 
+  group_by(decade) %>%
+  top_n(10) %>%
+  ungroup %>%
+  mutate(word = reorder(word, log_odds_weighted)) %>%
+  ggplot(aes(log_odds_weighted, word, fill = factor(decade))) +
+  geom_col(show.legend = FALSE) +
+  scale_fill_brewer(palette = "Dark2") +
+  facet_wrap(~decade, scales = "free") +
+  labs(y = NULL,
+       x = "Specificity of word to decade's patents") 
+
+```
 
 ---
 

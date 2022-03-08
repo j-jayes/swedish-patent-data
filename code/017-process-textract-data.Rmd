@@ -86,6 +86,8 @@ df_tidylo_log_odds <- df_tidylo_counts %>%
 df_tidylo_log_odds %>%
   arrange(-log_odds_weighted)
 
+# df_tidylo_log_odds %>% write_rds("data/patent-info-prv/electric_patent_graphic.rds")
+
 df_tidylo_log_odds %>%
   filter(nchar(word) > 4,
          !word %in% c("genom", "enligt")) %>% 
