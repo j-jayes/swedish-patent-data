@@ -94,7 +94,7 @@ def generate_table_csv(table_result, blocks_map, table_index):
 def main(file_name):
     table_csv = get_table_csv_results(file_name)
 
-    output_file = 'output_15.csv'
+    output_file = 'output_16.csv'
 
     # replace content
     with open(output_file, "wt") as fout:
