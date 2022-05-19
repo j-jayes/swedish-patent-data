@@ -1,0 +1,236 @@
+---
+title: "out from Forte presentation"
+author: "JJayes"
+date: '2022-05-19'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+class: inverse, center, middle
+name: fit
+
+# P1: Electricity and the evolution of agricultural inputs
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
+
+---
+
+# P1: Electricity and agric. inputs
+.panelset[
+.panel[.panel-name[Question]
+
+.center[## How did agricultural producers change their agricultural production in response to access to electricity?]
+
+]
+
+.panel[.panel-name[Data]
+.pull-left[
+
+```{r}
+data <- tibble(sources = c("Detailed electricity coverage maps", 
+                           "Agricultural output and inputs", 
+                           "Occupation and labour location data"),
+               where_from = c("State official investigations into electrification by county",
+                              "Agriculture and animal husbandry reports from SCB",
+                              "1930s census data"),
+               status = c("In posession, to be digitized",
+                          "In posession, to be digitized",
+                          "Awaiting 1930 census from Riksarkivet"))
+
+knitr::kable(data, col.names = c("Sources", "Where from?", "Status"))
+```
+
+
+]
+
+.pull-right[
+
+```{r, out.width="80%"}
+knitr::include_graphics("slides/data_p1.PNG")
+```
+
+
+]
+
+]
+
+.panel[.panel-name[Model]
+
+Outcome variables:
+
+- Agricultural output per agricultural worker by crop: some will be more labour intensive than others.
+- Number of draft animals
+- Farm size and ownership structure
+
+Independent variables:
+
+- Controls (?)
+
+Treatment:
+
+- Connection to grid
+- Geographical suitability for water power
+
+]
+
+.panel[.panel-name[Methods]
+
+### Difference in difference model:
+
+```{r, out.width="70%"}
+df <- readxl::read_excel("slide_data/diffindiff.xlsx")
+
+df %>% 
+  pivot_longer(-time) %>% 
+  ggplot(aes(time, value, colour = name)) +
+  geom_line() +
+  geom_point() +
+  geom_vline(xintercept = 10, lty = 1) +
+  labs(x = "Time",
+       y = "Agric output per labourer",
+       colour = "Group",
+       title = "Treated with electricity")
+
+```
+
+
+]
+
+.panel[.panel-name[Next steps]
+
+* Digitize the agricultural output and input data
+
+* Do the work
+
+]]
+
+---
+# Electrification by county
+
+### Electrification rate vs cost to complete
+
+```{r}
+library(ggiraph)
+library(cowplot)
+fig <- readRDS("slide_data/interactive_fig.rds")
+fig
+```
+
+---
+
+# Electrification by county
+
+### Electricity supply to agricultural land by type
+
+```{r}
+df_electvar <- read_rds("slide_data/df_electvar.rds")
+
+g <- df_electvar %>% 
+  mutate(tooltip = scales::percent(value, accuracy = 1),
+         tooltip = str_c(name, "\n", tooltip)) %>% 
+  ggplot(aes(value, county, fill = name, tooltip = tooltip)) +
+  geom_col_interactive(position = "stack") +
+  scale_x_continuous(labels = scales::percent_format(scale = 100)) +
+  scale_fill_brewer(palette = "Dark2") +
+  labs(x = "Percentage of arable land",
+       fill = NULL,
+       y = NULL)
+
+ggiraph(ggobj = g)
+
+```
+
+---
+# Variation in agric ownership
+
+### Farm ownership by parish (Skåne) 
+
+```{r, out.height=8}
+df_n_farms <- read_rds("slide_data/df_n_farms.rds")
+
+g <- df_n_farms %>% 
+  mutate(tooltip = scales::percent(value, accuracy = 1),
+         tooltip = str_c(name, "\n", tooltip)) %>% 
+  ggplot(aes(value, Region, fill = name, tooltip = tooltip)) +
+  geom_col_interactive(position = "fill") +
+  # facet_wrap(~ ownership) +
+  scale_x_continuous(labels = scales::percent_format()) +
+  labs(
+    x = NULL,
+    y = NULL,
+    fill = NULL
+  )
+
+ggiraph(ggobj = g)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+# Digitization
+
+### Agricultural output
+
+.pull-left[
+
+```{r}
+df_potato_horse <- read_rds("slide_data/df_potato_horse.rds")
+
+df_potato_horse %>%
+  ggplot(aes(`Horses over 3 years`, `Potatoes harvest`)) +
+  # geom_point() +
+  geom_smooth(method = "lm") +
+  geom_text(aes(label = x1), check_overlap = T) +
+  labs(
+    x = "Draft animals (horses and bulls)",
+    y = "Potato harvest per taxpayer"
+  )
+
+
+```
+
+
+]
+
+.pull-right[
+
+
+```{r, out.width="60%"}
+df_potato_horse %>%
+  lm(`Horses over 3 years` ~ `Potatoes harvest`, data = .) %>%
+  summary()
+```
+
+]
+
+
+---
+
+
+

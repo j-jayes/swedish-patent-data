@@ -124,21 +124,24 @@ df <- readxl::read_excel("slide_data/employment_by_industry_Sweden_new.xls", ski
 
 library(ggiraph)
 
-g <- df %>% 
-  mutate(Year = as.numeric(Year)) %>% 
+g <- df %>%
+  mutate(Year = as.numeric(Year)) %>%
   pivot_longer(-Year) %>%
-  filter(!name %in% c("Total aggregate economy", "Total private sector")) %>% 
-  mutate(tooltip = str_c("Number of employees ", scales::number(value, accuracy = 1))) %>% 
+  filter(!name %in% c("Total aggregate economy", "Total private sector")) %>%
+  mutate(tooltip = str_c("Number of employees ", scales::number(value, accuracy = 1))) %>%
   ggplot(aes(Year, value, fill = name, tooltip = tooltip)) +
   geom_tile_interactive(position = "fill") +
   scale_fill_brewer(palette = "Paired") +
   scale_y_continuous(labels = scales::percent_format()) +
   theme(legend.position = "bottom") +
-  labs(caption = "Source: Edvinsson, R. Number of employees in eight types of activities in Sweden 1850-2000\nVia Historia.se",
-       fill = NULL,
-       y = "Employment composition",
-       title = "Employment by sector in Sweden",
-       subtitle = "1850-2000")
+  guides(fill = guide_legend(nrow = 4, byrow = TRUE)) +
+  labs(
+    caption = "Source: Edvinsson, R. Number of employees in eight types of activities in Sweden 1850-2000\nVia Historia.se",
+    fill = NULL,
+    y = "Employment composition",
+    title = "Employment by sector in Sweden",
+    subtitle = "1850-2000"
+  )
 
 ggiraph(ggobj = g)
 
@@ -155,7 +158,9 @@ ggiraph(ggobj = g)
 ### Agric. falling share of output
 
 ```{r}
-knitr::include_graphics("slides/agric_manu_output.PNG")
+gg <- read_rds("slide_data/gg_industry.rds")
+
+ggiraph(ggobj = gg)
 ```
 
 .center[Manufacturing output from 1800 to 2000 in Sweden [Schön](http://www.historia.se/nominaloutputvalueaddedinputofactivitiesinmanufacturing.xls)]
@@ -1352,19 +1357,9 @@ df %>%
 ### Malmö's relative specificity in hospitality
 
 ```{r}
-df_hotel <- read_rds("data/riksvakanslistan/df_hotel_temp.rds")
+df_electricity_1 <- read_rds("slide_data/df_electricity.rds")
 
-df %>% 
-    inner_join(df_hotel %>% select(-hotel)) %>%
-  mutate(stan = fct_reorder(stan, total)) %>%
-  pivot_longer(c(total, total_hotel)) %>%
-  mutate(
-    name = case_when(
-      name == "total" ~ "Total vacancies",
-      TRUE ~ "Hotel related vacancies"
-    ),
-    name = fct_relevel(name, "Total vacancies")
-  ) %>%
+df_electricity_1 %>% 
   ggplot(aes(value, stan, fill = name)) +
   geom_col(show.legend = FALSE) +
   scale_fill_manual(values = c("#23373B", "#EB821D")) +
