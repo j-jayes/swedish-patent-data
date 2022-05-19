@@ -947,12 +947,3 @@ Our finding that employment rises in occupations exposed to augmentation innovat
 
 
 ---
-
-class: inverse, center, middle
-name: digitize
-
-# How can we get the data?
-
-<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
-
----
