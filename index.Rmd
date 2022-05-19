@@ -210,7 +210,7 @@ Data:
 .pull-right[
 
 ```{r}
-knitr::include_graphics("slides/more_power_diagram.png")
+knitr::include_graphics("slides/more_power_diagram.PNG")
 ```
 
 ]
