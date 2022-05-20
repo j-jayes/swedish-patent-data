@@ -247,7 +247,6 @@ name: fit
 # Update on previous presentation
 
 <html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
-
 ---
 # Quantifying new types of work
 
@@ -467,15 +466,6 @@ knitr::include_graphics("slides/word2vec.png")
 
 ---
 
-# How do we measure closeness?
-
-```{r}
-# knitr::include_graphics("slides/word2vec.png")
-```
-
-<!-- .center[Word2Vec word embedding example from [Google AI](https://arxiv.org/abs/1301.3781)] -->
-
----
 
 # Labour automation example
 
@@ -826,7 +816,7 @@ df %>%
 
 ---
 # Locations of electricity jobs
-Including terms "Elektriker", "Metallslipare" and 
+Including terms "Elektriker" and "Metallslipare".
 
 ```{r}
 df_electricity_1 <- read_rds("slide_data/df_electricity.rds")
@@ -930,8 +920,6 @@ lan_map_24 %>%
 
 
 ]
-
-
 ---
 
 # What can we test?
@@ -943,7 +931,30 @@ Our finding that employment rises in occupations exposed to augmentation innovat
 </blockquote>
 
 [Autor, Salomons and Seegmiller (2021)](https://economics.mit.edu/files/21810)
+---
 
+class: inverse, center, middle
+name: fit
 
+# P2: Who did this work and with which skills?
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>
 
 ---
+# Who did this work and with which skills?
+
+### Did some regions which specialized in electricity related production draw workers with required skills from further afield?
+
+---
+# Who did this work?
+
+### Birthplaces of Linköping residents in 1910
+
+```{r, out.width="70%"}
+knitr::include_graphics("slides/migration_p3.PNG")
+```
+
+Source: 1910 Swedish Census form IPUMS International
+
+
+
